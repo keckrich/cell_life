@@ -50,6 +50,7 @@ public class Settings : ScriptableObject
     private resetPos resetPosEvent;
     private resetPos randomizePosEvent;
     private resetPos validateEvent;
+    private resetPos GPUEvent;
     public void RegisterResetPosEvent(resetPos resetPosEvent)
     {
         this.resetPosEvent += resetPosEvent;
@@ -62,6 +63,10 @@ public class Settings : ScriptableObject
     {
         this.randomizePosEvent += randomizePosEvent;
     }
+    public void RegisterGPUEvent(resetPos GPUEvent)
+    {
+        this.GPUEvent += GPUEvent;
+    }
 
     public void Reset()
     {
@@ -70,6 +75,10 @@ public class Settings : ScriptableObject
     public void Randomize()
     {
         randomizePosEvent();
+    }
+    public void GPUClick()
+    {
+        GPUEvent();
     }
 
     void OnValidate()

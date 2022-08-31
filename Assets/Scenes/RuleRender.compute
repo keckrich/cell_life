@@ -1,0 +1,54 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+ 
+// #define Particle4 matrix <Particle, 4, 1> 
+
+struct Particle{
+    float2 force;
+    float2 position;
+    float2 velocity;
+    // float pad1;
+};
+
+// typedef matrix <Particle, 4> ParticleMatrix;
+
+// color 1: yellow 2: red 3: green 4: blue
+struct Rule{
+    int color1;
+    int color2;
+    float force;
+};
+
+RWStructuredBuffer<Particle> yellow;
+RWStructuredBuffer<Particle> red;
+RWStructuredBuffer<Particle> green;
+RWStructuredBuffer<Particle> blue;
+
+StructuredBuffer<Rule> rules;
+
+// RWStructuredBuffer<Particle> particles[4];
+// Particle particles[4][256];
+
+// Particle4 particles;
+
+// sizeof(Particle);
+
+
+
+[numthreads(8,8,16)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    RWStructuredBuffer<Particle> particles[4] = {yellow, red, green, blue};
+    // TODO: insert actual code here!
+    // Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+
+    // get all the yellow particles
+    Particle a = particles[0][id.x];
+    Particle b = particles[1][id.x]; 
+
+    a.position = b.position;
+
+    // particles[0][id.x] = a;
+    yellow[id.x] = a;
+
+}

@@ -18,6 +18,8 @@ public class movement : MonoBehaviour
     Particle[] blueArray;
     Particle[][] particleArray;
 
+    public ComputeShader computeShader;
+
     private float WIDTH;
     private float HEIGHT;
 
@@ -31,9 +33,8 @@ public class movement : MonoBehaviour
         public float vy;
         public Color color;
         public GameObject obj;
-        public bool isInBounds;
 
-        public Particle(float fx, float fy, float x, float y, float vx, float vy, Color color, GameObject obj, bool isInBounds)
+        public Particle(float fx, float fy, float x, float y, float vx, float vy, Color color, GameObject obj)
         {
             this.fx = fx;
             this.fy = fy;
@@ -43,7 +44,36 @@ public class movement : MonoBehaviour
             this.vy = vy;
             this.color = color;
             this.obj = obj;
-            this.isInBounds = isInBounds;
+        }
+    }
+
+    public struct GPUParticle
+    {
+        public float fx;
+        public float fy;
+        public float x;
+        public float y;
+        public float vx;
+        public float vy;
+
+        public GPUParticle(float fx, float fy, float x, float y, float vx, float vy)
+        {
+            this.fx = fx;
+            this.fy = fy;
+            this.x = x;
+            this.y = y;
+            this.vx = vx;
+            this.vy = vy;
+        }
+
+        public GPUParticle(Particle p)
+        {
+            this.fx = p.fx;
+            this.fy = p.fy;
+            this.x = p.x;
+            this.y = p.y;
+            this.vx = p.vx;
+            this.vy = p.vy;
         }
     }
 
@@ -57,6 +87,7 @@ public class movement : MonoBehaviour
 
         settingsValues.RegisterResetPosEvent(updateCount);
         settingsValues.RegisterRandomizePosEvent(RandomizeConnections);
+        settingsValues.RegisterGPUEvent(GPURender);
 
         Random.InitState(seed);
 
@@ -76,22 +107,7 @@ public class movement : MonoBehaviour
     {
         resetForce();
 
-        rule(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity);
-        rule(greenArray, redArray, settingsValues.green_red * settingsValues.gravity);
-        rule(greenArray, yellowArray, settingsValues.green_yellow * settingsValues.gravity);
-        rule(greenArray, blueArray, settingsValues.green_blue * settingsValues.gravity);
-        rule(redArray, redArray, settingsValues.red_red * settingsValues.gravity);
-        rule(redArray, greenArray, settingsValues.red_green * settingsValues.gravity);
-        rule(redArray, yellowArray, settingsValues.red_yellow * settingsValues.gravity);
-        rule(redArray, blueArray, settingsValues.red_blue * settingsValues.gravity);
-        rule(yellowArray, yellowArray, settingsValues.yellow_yellow * settingsValues.gravity);
-        rule(yellowArray, greenArray, settingsValues.yellow_green * settingsValues.gravity);
-        rule(yellowArray, redArray, settingsValues.yellow_red * settingsValues.gravity);
-        rule(yellowArray, blueArray, settingsValues.yellow_blue * settingsValues.gravity);
-        rule(blueArray, blueArray, settingsValues.blue_blue * settingsValues.gravity);
-        rule(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity);
-        rule(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity);
-        rule(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity);
+        CPURender();    
 
         updateVelocityAndPosition();
 
@@ -167,7 +183,7 @@ public class movement : MonoBehaviour
             GameObject go = Instantiate(particleObj, new Vector3(Random.Range(settingsValues.xMin, settingsValues.xMax), Random.Range(settingsValues.yMin, settingsValues.yMax), 0f), Quaternion.identity);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            result[i] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0f, 0f, color, go, true);
+            result[i] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0f, 0f, color, go);
         }
 
         return result;
@@ -181,12 +197,12 @@ public class movement : MonoBehaviour
             GameObject go = Instantiate(particleObj, new Vector3(950, 500f, 0f), Quaternion.identity);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            result[0] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go, true);
+            result[0] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go);
 
             go = Instantiate(particleObj, new Vector3(-800, 500f, 0f), Quaternion.identity);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            result[1] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go, true);
+            result[1] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go);
         
 
         return result;
@@ -296,6 +312,102 @@ public class movement : MonoBehaviour
         }
     }
 
+    void CPURender(){
+        rule(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity);
+        rule(greenArray, redArray, settingsValues.green_red * settingsValues.gravity);
+        rule(greenArray, yellowArray, settingsValues.green_yellow * settingsValues.gravity);
+        rule(greenArray, blueArray, settingsValues.green_blue * settingsValues.gravity);
+        rule(redArray, redArray, settingsValues.red_red * settingsValues.gravity);
+        rule(redArray, greenArray, settingsValues.red_green * settingsValues.gravity);
+        rule(redArray, yellowArray, settingsValues.red_yellow * settingsValues.gravity);
+        rule(redArray, blueArray, settingsValues.red_blue * settingsValues.gravity);
+        rule(yellowArray, yellowArray, settingsValues.yellow_yellow * settingsValues.gravity);
+        rule(yellowArray, greenArray, settingsValues.yellow_green * settingsValues.gravity);
+        rule(yellowArray, redArray, settingsValues.yellow_red * settingsValues.gravity);
+        rule(yellowArray, blueArray, settingsValues.yellow_blue * settingsValues.gravity);
+        rule(blueArray, blueArray, settingsValues.blue_blue * settingsValues.gravity);
+        rule(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity);
+        rule(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity);
+        rule(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity);
+    }
+
+    void GPURender(){
+            int particleSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(GPUParticle));
+
+            // convert particle array to gpu particle array
+            GPUParticle[] gpuGreenArray = new GPUParticle[greenArray.Length];
+            GPUParticle[] gpuRedArray = new GPUParticle[redArray.Length];
+            GPUParticle[] gpuYellowArray = new GPUParticle[yellowArray.Length];
+            GPUParticle[] gpuBlueArray = new GPUParticle[blueArray.Length];
+            for (int i = 0; i < greenArray.Length; i++)
+            {
+                gpuGreenArray[i] = new GPUParticle(greenArray[i]);
+                gpuRedArray[i] = new GPUParticle(redArray[i]);
+                gpuYellowArray[i] = new GPUParticle(yellowArray[i]);
+                gpuBlueArray[i] = new GPUParticle(blueArray[i]);
+            }
+
+            // create buffers
+            ComputeBuffer greenBuffer = new ComputeBuffer(greenArray.Length, particleSize);
+            ComputeBuffer redBuffer = new ComputeBuffer(redArray.Length, particleSize);
+            ComputeBuffer yellowBuffer = new ComputeBuffer(yellowArray.Length, particleSize);
+            ComputeBuffer blueBuffer = new ComputeBuffer(blueArray.Length, particleSize);
+
+            // set buffers
+            greenBuffer.SetData(gpuGreenArray);
+            redBuffer.SetData(gpuRedArray);
+            yellowBuffer.SetData(gpuYellowArray);
+            blueBuffer.SetData(gpuBlueArray);
+
+            // set shader buffers
+            computeShader.SetBuffer(0, "green", greenBuffer);
+            computeShader.SetBuffer(0, "red", redBuffer);
+            computeShader.SetBuffer(0, "yellow", yellowBuffer);
+            computeShader.SetBuffer(0, "blue", blueBuffer);
+
+            computeShader.Dispatch(0, greenArray.Length / 8, greenArray.Length / 8, 1);
+
+            // get data back
+            greenBuffer.GetData(gpuGreenArray);
+            redBuffer.GetData(gpuRedArray);
+            yellowBuffer.GetData(gpuYellowArray);
+            blueBuffer.GetData(gpuBlueArray);
+            
+            // release buffers
+            greenBuffer.Release();
+            redBuffer.Release();
+            yellowBuffer.Release();
+            blueBuffer.Release();
+
+    }
+
+    // void GPURender(){
+    //     int particleSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(GPUParticle));
+
+    //     GPUParticle[][] gpuParticleArray = new GPUParticle[particleArray.Length][];
+
+    //     for (int i = 0; i < particleArray.Length; i++)
+    //     {
+    //         gpuParticleArray[i] = new GPUParticle[particleArray[i].Length];
+    //         for (int j = 0; j < particleArray[i].Length; j++)
+    //         {
+    //             gpuParticleArray[i][j] = new GPUParticle(particleArray[i][j]);
+    //         }
+    //     }
+        
+    //     ComputeBuffer particleBuffer = new ComputeBuffer(gpuParticleArray.Length * gpuParticleArray[0].Length, particleSize);
+    //     particleBuffer.SetData(gpuParticleArray);
+
+    //     computeShader.SetBuffer(0, "particles", particleBuffer);
+    //     computeShader.Dispatch(0, gpuParticleArray[0].Length / 8, gpuParticleArray[0].Length / 8, 1);
+
+    //     // particleBuffer.GetData(gpuParticleArray);
+    //     particleBuffer.Release();
+
+        
+
+
+    // }
     public void updateVelocityAndPosition()
     {
         for (int i = 0; i < particleArray.Length; i++)
