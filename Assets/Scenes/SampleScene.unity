@@ -1842,7 +1842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   placement: 0
-  defaultState: 1
+  defaultState: 0
   transitionSpeed: 10
   thresholdDragSpeed: 0
   thresholdDraggedFraction: 0.5
@@ -2008,7 +2008,7 @@ Transform:
   m_GameObject: {fileID: 920383541}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1453, y: 419, z: 0}
-  m_LocalScale: {x: 5.14, y: 5.14, z: 0.514}
+  m_LocalScale: {x: 4, y: 4, z: 0.40000004}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1086664353}
@@ -2264,7 +2264,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.8362097, y: 0.34606874, z: -2.4987655}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 920383542}
   m_Father: {fileID: 0}
@@ -2786,7 +2786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1
-  radius: 300
+  radius: 200
   settingsValues: {fileID: 11400000, guid: 6f974370a1a455d42b127beccf12255e, type: 2}
   particleObj: {fileID: 920383541}
 --- !u!1 &1406474500

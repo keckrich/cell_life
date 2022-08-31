@@ -18,6 +18,9 @@ public class movement : MonoBehaviour
     Particle[] blueArray;
     Particle[][] particleArray;
 
+    private float WIDTH;
+    private float HEIGHT;
+
     public struct Particle
     {
         public float fx;
@@ -49,24 +52,21 @@ public class movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // settingsValues.RegisterResetPosEvent(resetPos);
+        WIDTH = settingsValues.xMax - settingsValues.xMin;
+        HEIGHT = settingsValues.yMax - settingsValues.yMin;
+
         settingsValues.RegisterResetPosEvent(updateCount);
         settingsValues.RegisterRandomizePosEvent(RandomizeConnections);
-        // settingsValues.RegisterChangeCountEvent(updateCount);
 
         Random.InitState(seed);
 
-        // greenArray = Create(settingsValues.green_count, new Color(0.8627f, 0.3686f, 0.1137f));
-        greenArray = Create(settingsValues.green_count, new Color(0.08627f, 0.3686f, 0.1137f));
         yellowArray = Create(settingsValues.yellow_count, Color.yellow);
         redArray = Create(settingsValues.red_count, Color.red);
+        greenArray = Create(settingsValues.green_count, new Color(0.08627f, 0.3686f, 0.1137f));
         blueArray = Create(settingsValues.blue_count, Color.blue);
 
         particleArray = new Particle[][] { yellowArray, redArray, greenArray, blueArray };
-
-
-
-        // rule(yellowArray, yellowArray, settingsValues.gravity);
+;
 
 
     }
@@ -74,10 +74,6 @@ public class movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // rule(yellowArray, yellowArray, settingsValues.gravity);
-        // rule(yellowArray, redArray, settingsValues.gravity);
-        // rule(redArray, yellowArray, settingsValues.gravity);
-
         resetForce();
 
         rule(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity);
@@ -97,22 +93,9 @@ public class movement : MonoBehaviour
         rule(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity);
         rule(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity);
 
-
-        // rule(yellowArray, redArray, 0.15f * settingsValues.gravity);
-        // rule(greenArray, greenArray, -0.7f * settingsValues.gravity);
-        // rule(greenArray, redArray, -0.2f * settingsValues.gravity);
-        // rule(redArray, greenArray, -0.1f * settingsValues.gravity);
-        // rule(blueArray, blueArray, 0.3f * settingsValues.gravity);
-        // rule(blueArray, redArray, -0.1f * settingsValues.gravity);
-        // rule(redArray, blueArray, -0.1f * settingsValues.gravity);
-        // rule(blueArray, yellowArray, -0.5f * settingsValues.gravity);
-
         updateVelocityAndPosition();
 
         draw();
-        // rule(redArray, yellowArray, settingsValues.gravity);
-
-        // yellowArray
     }
 
     void resetPos()
@@ -189,6 +172,25 @@ public class movement : MonoBehaviour
 
         return result;
     }
+    Particle[] CreateDebug(int number, Color color)
+    {
+        Particle[] result = new Particle[number];
+        SpriteRenderer spriteRenderer;
+
+        
+            GameObject go = Instantiate(particleObj, new Vector3(950, 500f, 0f), Quaternion.identity);
+            spriteRenderer = go.GetComponent<SpriteRenderer>();
+            spriteRenderer.color = color;
+            result[0] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go, true);
+
+            go = Instantiate(particleObj, new Vector3(-800, 500f, 0f), Quaternion.identity);
+            spriteRenderer = go.GetComponent<SpriteRenderer>();
+            spriteRenderer.color = color;
+            result[1] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go, true);
+        
+
+        return result;
+    }
 
     void draw()
     {
@@ -207,10 +209,11 @@ public class movement : MonoBehaviour
         {
             float fx = 0f;
             float fy = 0f;
+            
             for (int j = 0; j < particlesB.Length; j++)
             {
-                float dx = particlesA[i].x - particlesB[j].x;
-                float dy = particlesA[i].y - particlesB[j].y;
+                float dx = System.MathF.Abs(particlesB[j].x - particlesA[i].x);
+                float dy = System.MathF.Abs(particlesB[j].y - particlesA[i].y);
 
                 if (dx > (settingsValues.xMax - settingsValues.xMin)/2)
                 {
@@ -220,11 +223,13 @@ public class movement : MonoBehaviour
                 {
                     dy = (settingsValues.yMax - settingsValues.yMin) - dy;
                 }
-
-
                 float distance = Mathf.Sqrt(dx * dx + dy * dy);
                 // Debug.Log("d: " + distance);
-                if (distance > 0 && distance < radius)
+
+                dx = dx * getDirection(particlesA[i].x, particlesB[j].x, WIDTH);
+                dy = dy * getDirection(particlesA[i].y, particlesB[j].y, HEIGHT);
+
+                if (distance > 0 && distance < radius )
                 {
                     float force = g * 1f / distance;
                     fx += (force * dx);
@@ -233,8 +238,8 @@ public class movement : MonoBehaviour
             }
             particlesA[i].fx += fx;
             particlesA[i].fy += fy;
-            // particlesA[i].vx = (particlesA[i].vx + fx) * 0.5f;
-            // particlesA[i].vy = (particlesA[i].vy + fy) * 0.5f;
+            // particlesA[i].vx = (particlesA[i].vx + fx) * settingsValues.damping;
+            // particlesA[i].vy = (particlesA[i].vy + fy) * settingsValues.damping;
             // particlesA[i].x += particlesA[i].vx;
             // particlesA[i].y += particlesA[i].vy;
             
@@ -250,20 +255,44 @@ public class movement : MonoBehaviour
             //     particlesA[i].vy *= -1;
             // }
 
+            // TODO figure out if the velocity is getting canceled out when it loops around the screen
+
             // if a particle is on the edge loop it around
             // if (particlesA[i].x > settingsValues.xMax){
-            //     particlesA[i].x = settingsValues.xMin;
+            //     particlesA[i].x = particlesA[i].x - WIDTH ;
             // }
             // if (particlesA[i].x < settingsValues.xMin){
-            //     particlesA[i].x = settingsValues.xMax;
+            //     particlesA[i].x = particlesA[i].x + WIDTH ;
             // }
             // if (particlesA[i].y > settingsValues.yMax){
-            //     particlesA[i].y = settingsValues.yMin;
+            //     particlesA[i].y = particlesA[i].y - HEIGHT ;
             // }
             // if (particlesA[i].y < settingsValues.yMin){
-            //     particlesA[i].y = settingsValues.yMax;
+            //     particlesA[i].y = particlesA[i].y + HEIGHT ;
             // }
 
+        }
+    }
+
+    // return 1 if right/up and -1 if left/down
+    int getDirection(float a, float b, float dim){
+        if (a < b){
+            float d1 = b - a;
+            float d2 = (dim - b) + a;
+            if (d1 < d2){
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        else{
+            float d1 = a - b;
+            float d2 = (dim - a) + b;
+            if (d1 < d2){
+                return -1;
+            } else {
+                return 1;
+            }
         }
     }
 
@@ -273,40 +302,23 @@ public class movement : MonoBehaviour
         {
             for (int j = 0; j < particleArray[i].Length; j++)
             {
-                particleArray[i][j].vx = (particleArray[i][j].vx + particleArray[i][j].fx) * 0.5f;
-                particleArray[i][j].vy = (particleArray[i][j].vy + particleArray[i][j].fy) * 0.5f;
+                particleArray[i][j].vx = (particleArray[i][j].vx + particleArray[i][j].fx) * settingsValues.damping;
+                particleArray[i][j].vy = (particleArray[i][j].vy + particleArray[i][j].fy) * settingsValues.damping;
                 particleArray[i][j].x += particleArray[i][j].vx;
                 particleArray[i][j].y += particleArray[i][j].vy;
 
-                // flip the velocity if the particle is on the edge
-                // if ((particleArray[i][j].x > settingsValues.xMax || particleArray[i][j].x < settingsValues.xMin) && particleArray[i][j].isInBounds)
-                // {
-                //     particleArray[i][j].isInBounds = false;
-                //     particleArray[i][j].vx *= -1;
-                // }
-                // if ((particleArray[i][j].y > settingsValues.yMax || particleArray[i][j].y < settingsValues.yMin) && particleArray[i][j].isInBounds)
-                // {
-                //     particleArray[i][j].isInBounds = false;
-                //     particleArray[i][j].vy *= -1;
-                // }
-                // if (particleArray[i][j].x < settingsValues.xMax && particleArray[i][j].x > settingsValues.xMin && particleArray[i][j].y < settingsValues.yMax && particleArray[i][j].y > settingsValues.yMin)
-                // {
-                //     particleArray[i][j].isInBounds = true;
-                // }
-
-
                 // if a particle is on the edge loop it around
                 if (particleArray[i][j].x > settingsValues.xMax){
-                    particleArray[i][j].x = settingsValues.xMin;
+                    particleArray[i][j].x = particleArray[i][j].x - WIDTH ;
                 }
                 if (particleArray[i][j].x < settingsValues.xMin){
-                    particleArray[i][j].x = settingsValues.xMax;
+                    particleArray[i][j].x = particleArray[i][j].x + WIDTH ;
                 }
                 if (particleArray[i][j].y > settingsValues.yMax){
-                    particleArray[i][j].y = settingsValues.yMin;
+                    particleArray[i][j].y = particleArray[i][j].y - HEIGHT ;
                 }
                 if (particleArray[i][j].y < settingsValues.yMin){
-                    particleArray[i][j].y = settingsValues.yMax;
+                    particleArray[i][j].y = particleArray[i][j].y + HEIGHT ;
                 }
             }
         }

@@ -13,12 +13,29 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   darkTheme: 0
-  yellow_count: 180
-  red_count: 20
-  green_count: 20
-  blue_count: 20
-  gravity: 0.625
+  yellow_count: 107
+  red_count: 209
+  green_count: 300
+  blue_count: 330
+  gravity: 0.695
+  damping: 0.535
   yMin: -540
   yMax: 540
   xMin: -960
   xMax: 960
+  green_green: -0.0770973
+  green_red: -0.02255404
+  green_yellow: -0.9867022
+  green_blue: -0.65445113
+  red_red: 0.6815746
+  red_green: 0.48457333
+  red_yellow: 0.45148036
+  red_blue: -0.39368498
+  yellow_yellow: -0.7256217
+  yellow_red: 0.769892
+  yellow_green: -0.48197663
+  yellow_blue: 0.18308485
+  blue_blue: 0.032467484
+  blue_red: -0.48936975
+  blue_yellow: 0.074100375
+  blue_green: 0.14809263

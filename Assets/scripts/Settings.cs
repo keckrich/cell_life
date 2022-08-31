@@ -12,6 +12,7 @@ public class Settings : ScriptableObject
     public int blue_count = 1;
 
     [Range(0, 1)] public float gravity = 1f;
+    [Range(0, 1)] public float damping = 1f;
 
     [HideInInspector]
     public float yMin = -540.0f;
