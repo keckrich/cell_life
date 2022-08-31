@@ -28,6 +28,7 @@ public class movement : MonoBehaviour
         public float vy;
         public Color color;
         public GameObject obj;
+        public bool isInBounds;
 
         public Particle(float fx, float fy, float x, float y, float vx, float vy, Color color, GameObject obj)
         {
@@ -49,6 +50,7 @@ public class movement : MonoBehaviour
     {
         // settingsValues.RegisterResetPosEvent(resetPos);
         settingsValues.RegisterResetPosEvent(updateCount);
+        settingsValues.RegisterRandomizePosEvent(RandomizeConnections);
         // settingsValues.RegisterChangeCountEvent(updateCount);
 
         Random.InitState(seed);
@@ -130,6 +132,24 @@ public class movement : MonoBehaviour
 
     }
 
+    void RandomizeConnections(){
+        settingsValues.green_green = Random.Range(-1f, 1f);
+        settingsValues.green_red = Random.Range(-1f, 1f);
+        settingsValues.green_yellow = Random.Range(-1f, 1f);
+        settingsValues.green_blue = Random.Range(-1f, 1f);
+        settingsValues.red_red = Random.Range(-1f, 1f);
+        settingsValues.red_green = Random.Range(-1f, 1f);
+        settingsValues.red_yellow = Random.Range(-1f, 1f);
+        settingsValues.red_blue = Random.Range(-1f, 1f);
+        settingsValues.yellow_yellow = Random.Range(-1f, 1f);
+        settingsValues.yellow_green = Random.Range(-1f, 1f);
+        settingsValues.yellow_red = Random.Range(-1f, 1f);
+        settingsValues.yellow_blue = Random.Range(-1f, 1f);
+        settingsValues.blue_blue = Random.Range(-1f, 1f);
+        settingsValues.blue_green = Random.Range(-1f, 1f);
+        settingsValues.blue_red = Random.Range(-1f, 1f);
+        settingsValues.blue_yellow = Random.Range(-1f, 1f);
+    }
     void updateCount()
     {
         Debug.Log("Updating count");
@@ -199,6 +219,11 @@ public class movement : MonoBehaviour
             }
             particlesA[i].fx += fx;
             particlesA[i].fy += fy;
+            // particlesA[i].vx = (particlesA[i].vx + fx) * 0.5f;
+            // particlesA[i].vy = (particlesA[i].vy + fy) * 0.5f;
+            // particlesA[i].x += particlesA[i].vx;
+            // particlesA[i].y += particlesA[i].vy;
+            
 
             if (particlesA[i].x > settingsValues.xMax || particlesA[i].x < settingsValues.xMin)
             {
@@ -238,6 +263,16 @@ public class movement : MonoBehaviour
                 particleArray[i][j].vy = (particleArray[i][j].vy + particleArray[i][j].fy) * 0.5f;
                 particleArray[i][j].x += particleArray[i][j].vx;
                 particleArray[i][j].y += particleArray[i][j].vy;
+
+                // flip the velocity if the particle is on the edge
+                if (particleArray[i][j].x > settingsValues.xMax || particleArray[i][j].x < settingsValues.xMin)
+                {
+                    particleArray[i][j].vx *= -1;
+                }
+                if (particleArray[i][j].y > settingsValues.yMax || particleArray[i][j].y < settingsValues.yMin)
+                {
+                    particleArray[i][j].vy *= -1;
+                }
             }
         }
     }

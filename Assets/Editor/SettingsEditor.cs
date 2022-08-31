@@ -21,6 +21,11 @@ public class SettingsEditor : Editor
         {
             settings.Reset();
         }
+
+        if (GUILayout.Button("Randomize"))
+        {
+            settings.Randomize();
+        }
     }
 
 

@@ -47,6 +47,7 @@ public class Settings : ScriptableObject
 
     public delegate void resetPos();
     private resetPos resetPosEvent;
+    private resetPos randomizePosEvent;
     private resetPos validateEvent;
     public void RegisterResetPosEvent(resetPos resetPosEvent)
     {
@@ -56,10 +57,18 @@ public class Settings : ScriptableObject
     {
         this.validateEvent += changeValidateEvent;
     }
+    public void RegisterRandomizePosEvent(resetPos randomizePosEvent)
+    {
+        this.randomizePosEvent += randomizePosEvent;
+    }
 
     public void Reset()
     {
         resetPosEvent();
+    }
+    public void Randomize()
+    {
+        randomizePosEvent();
     }
 
     void OnValidate()
