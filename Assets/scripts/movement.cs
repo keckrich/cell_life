@@ -20,6 +20,8 @@ public class movement : MonoBehaviour
 
     public struct Particle
     {
+        public float fx;
+        public float fy;
         public float x;
         public float y;
         public float vx;
@@ -27,8 +29,10 @@ public class movement : MonoBehaviour
         public Color color;
         public GameObject obj;
 
-        public Particle(float x, float y, float vx, float vy, Color color, GameObject obj)
+        public Particle(float fx, float fy, float x, float y, float vx, float vy, Color color, GameObject obj)
         {
+            this.fx = fx;
+            this.fy = fy;
             this.x = x;
             this.y = y;
             this.vx = vx;
@@ -71,6 +75,8 @@ public class movement : MonoBehaviour
         // rule(yellowArray, redArray, settingsValues.gravity);
         // rule(redArray, yellowArray, settingsValues.gravity);
 
+        resetForce();
+
         rule(redArray, redArray, 0.1f * settingsValues.gravity);
         rule(yellowArray, redArray, 0.15f * settingsValues.gravity);
         rule(greenArray, greenArray, -0.7f * settingsValues.gravity);
@@ -80,6 +86,8 @@ public class movement : MonoBehaviour
         rule(blueArray, redArray, -0.1f * settingsValues.gravity);
         rule(redArray, blueArray, -0.1f * settingsValues.gravity);
         rule(blueArray, yellowArray, -0.5f * settingsValues.gravity);
+
+        updateVelocityAndPosition();
 
         draw();
         // rule(redArray, yellowArray, settingsValues.gravity);
@@ -136,7 +144,7 @@ public class movement : MonoBehaviour
             GameObject go = Instantiate(particleObj, new Vector3(Random.Range(settingsValues.xMin, settingsValues.xMax), Random.Range(settingsValues.yMin, settingsValues.yMax), 0f), Quaternion.identity);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            result[i] = new Particle(go.transform.position.x, go.transform.position.y, 0f, 0f, color, go);
+            result[i] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0f, 0f, color, go);
         }
 
         return result;
@@ -172,10 +180,8 @@ public class movement : MonoBehaviour
                     fy += (force * dy);
                 }
             }
-            particlesA[i].vx = (particlesA[i].vx + fx) * 0.5f;
-            particlesA[i].vy = (particlesA[i].vy + fy) * 0.5f;
-            particlesA[i].x += particlesA[i].vx;
-            particlesA[i].y += particlesA[i].vy;
+            particlesA[i].fx += fx;
+            particlesA[i].fy += fy;
 
             if (particlesA[i].x > settingsValues.xMax || particlesA[i].x < settingsValues.xMin)
             {
@@ -205,7 +211,30 @@ public class movement : MonoBehaviour
         }
     }
 
+    public void updateVelocityAndPosition()
+    {
+        for (int i = 0; i < particleArray.Length; i++)
+        {
+            for (int j = 0; j < particleArray[i].Length; j++)
+            {
+                particleArray[i][j].vx = (particleArray[i][j].vx + particleArray[i][j].fx) * 0.5f;
+                particleArray[i][j].vy = (particleArray[i][j].vy + particleArray[i][j].fy) * 0.5f;
+                particleArray[i][j].x += particleArray[i][j].vx;
+                particleArray[i][j].y += particleArray[i][j].vy;
+            }
+        }
+    }
 
+    public void resetForce(){
+        for (int i = 0; i < particleArray.Length; i++)
+        {
+            for (int j = 0; j < particleArray[i].Length; j++)
+            {
+                particleArray[i][j].fx = 0f;
+                particleArray[i][j].fy = 0f;
+            }
+        }
+    }
 
 
 }
