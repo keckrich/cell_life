@@ -77,15 +77,32 @@ public class movement : MonoBehaviour
 
         resetForce();
 
-        rule(redArray, redArray, 0.1f * settingsValues.gravity);
-        rule(yellowArray, redArray, 0.15f * settingsValues.gravity);
-        rule(greenArray, greenArray, -0.7f * settingsValues.gravity);
-        rule(greenArray, redArray, -0.2f * settingsValues.gravity);
-        rule(redArray, greenArray, -0.1f * settingsValues.gravity);
-        rule(blueArray, blueArray, 0.3f * settingsValues.gravity);
-        rule(blueArray, redArray, -0.1f * settingsValues.gravity);
-        rule(redArray, blueArray, -0.1f * settingsValues.gravity);
-        rule(blueArray, yellowArray, -0.5f * settingsValues.gravity);
+        rule(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity);
+        rule(greenArray, redArray, settingsValues.green_red * settingsValues.gravity);
+        rule(greenArray, yellowArray, settingsValues.green_yellow * settingsValues.gravity);
+        rule(greenArray, blueArray, settingsValues.green_blue * settingsValues.gravity);
+        rule(redArray, redArray, settingsValues.red_red * settingsValues.gravity);
+        rule(redArray, greenArray, settingsValues.red_green * settingsValues.gravity);
+        rule(redArray, yellowArray, settingsValues.red_yellow * settingsValues.gravity);
+        rule(redArray, blueArray, settingsValues.red_blue * settingsValues.gravity);
+        rule(yellowArray, yellowArray, settingsValues.yellow_yellow * settingsValues.gravity);
+        rule(yellowArray, greenArray, settingsValues.yellow_green * settingsValues.gravity);
+        rule(yellowArray, redArray, settingsValues.yellow_red * settingsValues.gravity);
+        rule(yellowArray, blueArray, settingsValues.yellow_blue * settingsValues.gravity);
+        rule(blueArray, blueArray, settingsValues.blue_blue * settingsValues.gravity);
+        rule(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity);
+        rule(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity);
+        rule(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity);
+
+
+        // rule(yellowArray, redArray, 0.15f * settingsValues.gravity);
+        // rule(greenArray, greenArray, -0.7f * settingsValues.gravity);
+        // rule(greenArray, redArray, -0.2f * settingsValues.gravity);
+        // rule(redArray, greenArray, -0.1f * settingsValues.gravity);
+        // rule(blueArray, blueArray, 0.3f * settingsValues.gravity);
+        // rule(blueArray, redArray, -0.1f * settingsValues.gravity);
+        // rule(redArray, blueArray, -0.1f * settingsValues.gravity);
+        // rule(blueArray, yellowArray, -0.5f * settingsValues.gravity);
 
         updateVelocityAndPosition();
 

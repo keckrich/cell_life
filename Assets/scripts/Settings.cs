@@ -22,6 +22,28 @@ public class Settings : ScriptableObject
     [HideInInspector]
     public float xMax = 960.0f;
 
+    #region forces
+
+    [Header("Forces")]
+    [Range(-1, 1)] public float green_green = 0f;
+    [Range(-1, 1)] public float green_red = 0f;
+    [Range(-1, 1)] public float green_yellow = 0f;
+    [Range(-1, 1)] public float green_blue = 0f;
+    [Range(-1, 1)] public float red_red = 0f;
+    [Range(-1, 1)] public float red_green = 0f;
+    [Range(-1, 1)] public float red_yellow = 0f;
+    [Range(-1, 1)] public float red_blue = 0f;
+    [Range(-1, 1)] public float yellow_yellow = 0f;
+    [Range(-1, 1)] public float yellow_red = 0f;
+    [Range(-1, 1)] public float yellow_green = 0f;
+    [Range(-1, 1)] public float yellow_blue = 0f;
+    [Range(-1, 1)] public float blue_blue = 0f;
+    [Range(-1, 1)] public float blue_red = 0f;
+    [Range(-1, 1)] public float blue_yellow = 0f;
+    [Range(-1, 1)] public float blue_green = 0f;
+
+    #endregion
+
 
     public delegate void resetPos();
     private resetPos resetPosEvent;
