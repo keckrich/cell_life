@@ -30,7 +30,7 @@ public class movement : MonoBehaviour
         public GameObject obj;
         public bool isInBounds;
 
-        public Particle(float fx, float fy, float x, float y, float vx, float vy, Color color, GameObject obj)
+        public Particle(float fx, float fy, float x, float y, float vx, float vy, Color color, GameObject obj, bool isInBounds)
         {
             this.fx = fx;
             this.fy = fy;
@@ -40,6 +40,7 @@ public class movement : MonoBehaviour
             this.vy = vy;
             this.color = color;
             this.obj = obj;
+            this.isInBounds = isInBounds;
         }
     }
 
@@ -116,12 +117,15 @@ public class movement : MonoBehaviour
 
     void resetPos()
     {
-        Debug.Log("Resetting position");
+        // Debug.Log("Resetting position");
 
         for (int i = 0; i < particleArray.Length; i++)
         {
             for (int j = 0; j < particleArray[i].Length; j++)
             {
+
+                particleArray[i][j].fx = 0;
+                particleArray[i][j].fy = 0;
                 particleArray[i][j].vx = 0;
                 particleArray[i][j].vy = 0;
                 particleArray[i][j].x = Random.Range(settingsValues.xMin, settingsValues.xMax);
@@ -131,7 +135,6 @@ public class movement : MonoBehaviour
         draw();
 
     }
-
     void RandomizeConnections(){
         settingsValues.green_green = Random.Range(-1f, 1f);
         settingsValues.green_red = Random.Range(-1f, 1f);
@@ -181,7 +184,7 @@ public class movement : MonoBehaviour
             GameObject go = Instantiate(particleObj, new Vector3(Random.Range(settingsValues.xMin, settingsValues.xMax), Random.Range(settingsValues.yMin, settingsValues.yMax), 0f), Quaternion.identity);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            result[i] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0f, 0f, color, go);
+            result[i] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0f, 0f, color, go, true);
         }
 
         return result;
@@ -225,16 +228,16 @@ public class movement : MonoBehaviour
             // particlesA[i].y += particlesA[i].vy;
             
 
-            if (particlesA[i].x > settingsValues.xMax || particlesA[i].x < settingsValues.xMin)
-            {
-                // Debug.Log("bounce x");
-                particlesA[i].vx *= -1;
-            }
-            if (particlesA[i].y > settingsValues.yMax || particlesA[i].y < settingsValues.yMin)
-            {
-                // Debug.Log("bounce y");
-                particlesA[i].vy *= -1;
-            }
+            // if (particlesA[i].x > settingsValues.xMax || particlesA[i].x < settingsValues.xMin)
+            // {
+            //     // Debug.Log("bounce x");
+            //     particlesA[i].vx *= -1;
+            // }
+            // if (particlesA[i].y > settingsValues.yMax || particlesA[i].y < settingsValues.yMin)
+            // {
+            //     // Debug.Log("bounce y");
+            //     particlesA[i].vy *= -1;
+            // }
 
             // if a particle is on the edge loop it around
             // if (particlesA[i].x > settingsValues.xMax){
@@ -265,13 +268,19 @@ public class movement : MonoBehaviour
                 particleArray[i][j].y += particleArray[i][j].vy;
 
                 // flip the velocity if the particle is on the edge
-                if (particleArray[i][j].x > settingsValues.xMax || particleArray[i][j].x < settingsValues.xMin)
+                if ((particleArray[i][j].x > settingsValues.xMax || particleArray[i][j].x < settingsValues.xMin) && particleArray[i][j].isInBounds)
                 {
+                    particleArray[i][j].isInBounds = false;
                     particleArray[i][j].vx *= -1;
                 }
-                if (particleArray[i][j].y > settingsValues.yMax || particleArray[i][j].y < settingsValues.yMin)
+                if ((particleArray[i][j].y > settingsValues.yMax || particleArray[i][j].y < settingsValues.yMin) && particleArray[i][j].isInBounds)
                 {
+                    particleArray[i][j].isInBounds = false;
                     particleArray[i][j].vy *= -1;
+                }
+                if (particleArray[i][j].x < settingsValues.xMax && particleArray[i][j].x > settingsValues.xMin && particleArray[i][j].y < settingsValues.yMax && particleArray[i][j].y > settingsValues.yMin)
+                {
+                    particleArray[i][j].isInBounds = true;
                 }
             }
         }
