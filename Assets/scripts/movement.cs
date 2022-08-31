@@ -211,6 +211,17 @@ public class movement : MonoBehaviour
             {
                 float dx = particlesA[i].x - particlesB[j].x;
                 float dy = particlesA[i].y - particlesB[j].y;
+
+                if (dx > (settingsValues.xMax - settingsValues.xMin)/2)
+                {
+                    dx = (settingsValues.xMax - settingsValues.xMin) - dx;
+                }
+                if (dy > (settingsValues.yMax - settingsValues.yMin)/2)
+                {
+                    dy = (settingsValues.yMax - settingsValues.yMin) - dy;
+                }
+
+
                 float distance = Mathf.Sqrt(dx * dx + dy * dy);
                 // Debug.Log("d: " + distance);
                 if (distance > 0 && distance < radius)
@@ -268,19 +279,34 @@ public class movement : MonoBehaviour
                 particleArray[i][j].y += particleArray[i][j].vy;
 
                 // flip the velocity if the particle is on the edge
-                if ((particleArray[i][j].x > settingsValues.xMax || particleArray[i][j].x < settingsValues.xMin) && particleArray[i][j].isInBounds)
-                {
-                    particleArray[i][j].isInBounds = false;
-                    particleArray[i][j].vx *= -1;
+                // if ((particleArray[i][j].x > settingsValues.xMax || particleArray[i][j].x < settingsValues.xMin) && particleArray[i][j].isInBounds)
+                // {
+                //     particleArray[i][j].isInBounds = false;
+                //     particleArray[i][j].vx *= -1;
+                // }
+                // if ((particleArray[i][j].y > settingsValues.yMax || particleArray[i][j].y < settingsValues.yMin) && particleArray[i][j].isInBounds)
+                // {
+                //     particleArray[i][j].isInBounds = false;
+                //     particleArray[i][j].vy *= -1;
+                // }
+                // if (particleArray[i][j].x < settingsValues.xMax && particleArray[i][j].x > settingsValues.xMin && particleArray[i][j].y < settingsValues.yMax && particleArray[i][j].y > settingsValues.yMin)
+                // {
+                //     particleArray[i][j].isInBounds = true;
+                // }
+
+
+                // if a particle is on the edge loop it around
+                if (particleArray[i][j].x > settingsValues.xMax){
+                    particleArray[i][j].x = settingsValues.xMin;
                 }
-                if ((particleArray[i][j].y > settingsValues.yMax || particleArray[i][j].y < settingsValues.yMin) && particleArray[i][j].isInBounds)
-                {
-                    particleArray[i][j].isInBounds = false;
-                    particleArray[i][j].vy *= -1;
+                if (particleArray[i][j].x < settingsValues.xMin){
+                    particleArray[i][j].x = settingsValues.xMax;
                 }
-                if (particleArray[i][j].x < settingsValues.xMax && particleArray[i][j].x > settingsValues.xMin && particleArray[i][j].y < settingsValues.yMax && particleArray[i][j].y > settingsValues.yMin)
-                {
-                    particleArray[i][j].isInBounds = true;
+                if (particleArray[i][j].y > settingsValues.yMax){
+                    particleArray[i][j].y = settingsValues.yMin;
+                }
+                if (particleArray[i][j].y < settingsValues.yMin){
+                    particleArray[i][j].y = settingsValues.yMax;
                 }
             }
         }
