@@ -115,7 +115,7 @@ public class movement : MonoBehaviour
 
         settingsValues.RegisterResetPosEvent(updateCount);
         settingsValues.RegisterRandomizePosEvent(RandomizeConnections);
-        settingsValues.RegisterGPUEvent(HybridRender);
+        // settingsValues.RegisterGPUEvent(expDist);
 
         Random.InitState(seed);
 
@@ -160,22 +160,22 @@ public class movement : MonoBehaviour
 
     }
     void RandomizeConnections(){
-        settingsValues.green_green = Random.Range(-2f, 2f);
-        settingsValues.green_red = Random.Range(-2f, 2f);
-        settingsValues.green_yellow = Random.Range(-2f, 2f);
-        settingsValues.green_blue = Random.Range(-2f, 2f);
-        settingsValues.red_red = Random.Range(-2f, 2f);
-        settingsValues.red_green = Random.Range(-2f, 2f);
-        settingsValues.red_yellow = Random.Range(-2f, 2f);
-        settingsValues.red_blue = Random.Range(-2f, 2f);
-        settingsValues.yellow_yellow = Random.Range(-2f, 2f);
-        settingsValues.yellow_green = Random.Range(-2f, 2f);
-        settingsValues.yellow_red = Random.Range(-2f, 2f);
-        settingsValues.yellow_blue = Random.Range(-2f, 2f);
-        settingsValues.blue_blue = Random.Range(-2f, 2f);
-        settingsValues.blue_green = Random.Range(-2f, 2f);
-        settingsValues.blue_red = Random.Range(-2f, 2f);
-        settingsValues.blue_yellow = Random.Range(-2f, 2f);
+        settingsValues.green_green = expDist();
+        settingsValues.green_red = expDist();
+        settingsValues.green_yellow = expDist();
+        settingsValues.green_blue = expDist();
+        settingsValues.red_red = expDist();
+        settingsValues.red_green = expDist();
+        settingsValues.red_yellow = expDist();
+        settingsValues.red_blue = expDist();
+        settingsValues.yellow_yellow = expDist();
+        settingsValues.yellow_green = expDist();
+        settingsValues.yellow_red = expDist();
+        settingsValues.yellow_blue = expDist();
+        settingsValues.blue_blue = expDist();
+        settingsValues.blue_green = expDist();
+        settingsValues.blue_red = expDist();
+        settingsValues.blue_yellow = expDist();
     }
 
     void RandomizeRanges(){
@@ -619,5 +619,13 @@ public class movement : MonoBehaviour
         }
     }
 
-
+    float expDist(){
+        float r = Random.Range(-4.5f, 4.5f);
+        float s = Mathf.Sign(r);
+        r = Mathf.Abs(r);
+        r = -Mathf.Log10(2*r +1)+1; 
+        r = r*s;
+        // Debug.Log(r);
+        return r;
+    }
 }
