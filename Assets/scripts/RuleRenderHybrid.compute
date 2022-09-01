@@ -55,11 +55,12 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
     if (distance > 0 && distance < rule.range) {
         float force =  rule.g * (1 / distance);
-        rule.fx += (force * dx);
-        rule.fy += (force * dy);
+        rules[0].fx += (force * dx);
+        rules[0].fy += (force * dy);
     }
-
-    rules[0].p = a;
+    
+    // rules[0].fx = 1.0;
+    // rules[0].p = a;
 
 }
 

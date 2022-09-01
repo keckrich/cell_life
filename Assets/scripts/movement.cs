@@ -115,7 +115,7 @@ public class movement : MonoBehaviour
 
         settingsValues.RegisterResetPosEvent(updateCount);
         settingsValues.RegisterRandomizePosEvent(RandomizeConnections);
-        settingsValues.RegisterGPUEvent(GPURender);
+        settingsValues.RegisterGPUEvent(HybridRender);
 
         Random.InitState(seed);
 
@@ -133,8 +133,9 @@ public class movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CPURender(); 
-        // GPURender();
+        // CPURender(); 
+        GPURender();
+        // HybridRender();
         draw();
     }
 
@@ -377,8 +378,12 @@ public class movement : MonoBehaviour
 
             computeShaderHybrid.Dispatch(0, particlesB.Length / 8, 1, 1);
 
-            particleBuffer.GetData(particlesB);
+            // particleBuffer.GetData(particlesB);
             hybridRuleBuffer.GetData(hybridRuleArray);
+
+            particleBuffer.Release();
+            hybridRuleBuffer.Release();
+
 
 
             particlesA[i].fx += hybridRuleArray[0].fx;
@@ -412,21 +417,21 @@ public class movement : MonoBehaviour
         resetForce();
 
         rule(yellowArray, yellowArray, settingsValues.yellow_yellow * settingsValues.gravity);
-        rule(yellowArray, redArray, settingsValues.yellow_red * settingsValues.gravity);
-        rule(yellowArray, greenArray, settingsValues.yellow_green * settingsValues.gravity);
-        rule(yellowArray, blueArray, settingsValues.yellow_blue * settingsValues.gravity);
-        rule(redArray, redArray, settingsValues.red_red * settingsValues.gravity);
-        rule(redArray, greenArray, settingsValues.red_green * settingsValues.gravity);
-        rule(redArray, yellowArray, settingsValues.red_yellow * settingsValues.gravity);
-        rule(redArray, blueArray, settingsValues.red_blue * settingsValues.gravity);
-        rule(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity);
-        rule(greenArray, redArray, settingsValues.green_red * settingsValues.gravity);
-        rule(greenArray, yellowArray, settingsValues.green_yellow * settingsValues.gravity);
-        rule(greenArray, blueArray, settingsValues.green_blue * settingsValues.gravity);
-        rule(blueArray, blueArray, settingsValues.blue_blue * settingsValues.gravity);
-        rule(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity);
-        rule(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity);
-        rule(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity);
+        // rule(yellowArray, redArray, settingsValues.yellow_red * settingsValues.gravity);
+        // rule(yellowArray, greenArray, settingsValues.yellow_green * settingsValues.gravity);
+        // rule(yellowArray, blueArray, settingsValues.yellow_blue * settingsValues.gravity);
+        // rule(redArray, redArray, settingsValues.red_red * settingsValues.gravity);
+        // rule(redArray, greenArray, settingsValues.red_green * settingsValues.gravity);
+        // rule(redArray, yellowArray, settingsValues.red_yellow * settingsValues.gravity);
+        // rule(redArray, blueArray, settingsValues.red_blue * settingsValues.gravity);
+        // rule(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity);
+        // rule(greenArray, redArray, settingsValues.green_red * settingsValues.gravity);
+        // rule(greenArray, yellowArray, settingsValues.green_yellow * settingsValues.gravity);
+        // rule(greenArray, blueArray, settingsValues.green_blue * settingsValues.gravity);
+        // rule(blueArray, blueArray, settingsValues.blue_blue * settingsValues.gravity);
+        // rule(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity);
+        // rule(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity);
+        // rule(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity);
 
         updateVelocityAndPosition();
     }
@@ -435,21 +440,21 @@ public class movement : MonoBehaviour
         resetForce();
 
         ruleHybrid(yellowArray, yellowArray, settingsValues.yellow_yellow * settingsValues.gravity, settingsValues.yellow_yellow_range);
-        ruleHybrid(yellowArray, redArray, settingsValues.yellow_red * settingsValues.gravity, settingsValues.yellow_red_range);
-        ruleHybrid(yellowArray, greenArray, settingsValues.yellow_green * settingsValues.gravity, settingsValues.yellow_green_range);
-        ruleHybrid(yellowArray, blueArray, settingsValues.yellow_blue * settingsValues.gravity, settingsValues.yellow_blue_range);
-        ruleHybrid(redArray, redArray, settingsValues.red_red * settingsValues.gravity, settingsValues.red_red_range);
-        ruleHybrid(redArray, greenArray, settingsValues.red_green * settingsValues.gravity, settingsValues.red_green_range);
-        ruleHybrid(redArray, yellowArray, settingsValues.red_yellow * settingsValues.gravity, settingsValues.red_yellow_range);
-        ruleHybrid(redArray, blueArray, settingsValues.red_blue * settingsValues.gravity, settingsValues.red_blue_range);
-        ruleHybrid(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity, settingsValues.green_green_range);
-        ruleHybrid(greenArray, redArray, settingsValues.green_red * settingsValues.gravity, settingsValues.green_red_range);
-        ruleHybrid(greenArray, yellowArray, settingsValues.green_yellow * settingsValues.gravity, settingsValues.green_yellow_range);
-        ruleHybrid(greenArray, blueArray, settingsValues.green_blue * settingsValues.gravity, settingsValues.green_blue_range);
-        ruleHybrid(blueArray, blueArray, settingsValues.blue_blue * settingsValues.gravity, settingsValues.blue_blue_range);
-        ruleHybrid(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity, settingsValues.blue_green_range);
-        ruleHybrid(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity, settingsValues.blue_red_range);
-        ruleHybrid(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity, settingsValues.blue_yellow_range);
+        // ruleHybrid(yellowArray, redArray, settingsValues.yellow_red * settingsValues.gravity, settingsValues.yellow_red_range);
+        // ruleHybrid(yellowArray, greenArray, settingsValues.yellow_green * settingsValues.gravity, settingsValues.yellow_green_range);
+        // ruleHybrid(yellowArray, blueArray, settingsValues.yellow_blue * settingsValues.gravity, settingsValues.yellow_blue_range);
+        // ruleHybrid(redArray, redArray, settingsValues.red_red * settingsValues.gravity, settingsValues.red_red_range);
+        // ruleHybrid(redArray, greenArray, settingsValues.red_green * settingsValues.gravity, settingsValues.red_green_range);
+        // ruleHybrid(redArray, yellowArray, settingsValues.red_yellow * settingsValues.gravity, settingsValues.red_yellow_range);
+        // ruleHybrid(redArray, blueArray, settingsValues.red_blue * settingsValues.gravity, settingsValues.red_blue_range);
+        // ruleHybrid(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity, settingsValues.green_green_range);
+        // ruleHybrid(greenArray, redArray, settingsValues.green_red * settingsValues.gravity, settingsValues.green_red_range);
+        // ruleHybrid(greenArray, yellowArray, settingsValues.green_yellow * settingsValues.gravity, settingsValues.green_yellow_range);
+        // ruleHybrid(greenArray, blueArray, settingsValues.green_blue * settingsValues.gravity, settingsValues.green_blue_range);
+        // ruleHybrid(blueArray, blueArray, settingsValues.blue_blue * settingsValues.gravity, settingsValues.blue_blue_range);
+        // ruleHybrid(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity, settingsValues.blue_green_range);
+        // ruleHybrid(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity, settingsValues.blue_red_range);
+        // ruleHybrid(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity, settingsValues.blue_yellow_range);
 
         updateVelocityAndPosition();
     }
