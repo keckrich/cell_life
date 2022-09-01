@@ -2921,7 +2921,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1
-  radius: 200
+  radius: 300
   settingsValues: {fileID: 11400000, guid: 6f974370a1a455d42b127beccf12255e, type: 2}
   particleObj: {fileID: 920383541}
   computeShader: {fileID: 7200000, guid: 37387c5d8fc308e40903abe2778d107a, type: 3}

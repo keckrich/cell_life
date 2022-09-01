@@ -255,7 +255,7 @@ public class movement : MonoBehaviour
 
                 if (distance > 0 && distance < radius )
                 {
-                    float force = g * 1f / distance;
+                    float force = g * (1f / distance);
                     fx += (force * dx);
                     fy += (force * dy);
                 }
