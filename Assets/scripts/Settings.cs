@@ -43,6 +43,24 @@ public class Settings : ScriptableObject
     [Range(-1, 1)] public float blue_yellow = 0f;
     [Range(-1, 1)] public float blue_green = 0f;
 
+    [Range(0, 1000)] public float green_green_range = 100f;
+    [Range(0, 1000)] public float green_red_range = 100f;
+    [Range(0, 1000)] public float green_yellow_range = 100f;
+    [Range(0, 1000)] public float green_blue_range = 100f;
+    [Range(0, 1000)] public float red_red_range = 100f;
+    [Range(0, 1000)] public float red_green_range = 100f;
+    [Range(0, 1000)] public float red_yellow_range = 100f;
+    [Range(0, 1000)] public float red_blue_range = 100f;
+    [Range(0, 1000)] public float yellow_yellow_range = 100f;
+    [Range(0, 1000)] public float yellow_red_range = 100f;
+    [Range(0, 1000)] public float yellow_green_range = 100f;
+    [Range(0, 1000)] public float yellow_blue_range = 100f;
+    [Range(0, 1000)] public float blue_blue_range = 100f;
+    [Range(0, 1000)] public float blue_red_range = 100f;
+    [Range(0, 1000)] public float blue_yellow_range = 100f;
+    [Range(0, 1000)] public float blue_green_range = 100f;
+    
+
     #endregion
 
 

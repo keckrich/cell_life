@@ -78,13 +78,15 @@ public class movement : MonoBehaviour
         uint color2;
         float force;
         float dampening;
+        float range;
 
-        public Rule(uint color1, uint color2, float force, float dampening)
+        public Rule(uint color1, uint color2, float force, float dampening, float range)
         {
             this.color1 = color1;
             this.color2 = color2;
             this.force = force;
             this.dampening = dampening;
+            this.range = range;
         }
     };
 
@@ -114,8 +116,8 @@ public class movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // CPURender(); 
-        GPURender();
+        CPURender(); 
+        // GPURender();
         draw();
     }
 
@@ -157,6 +159,25 @@ public class movement : MonoBehaviour
         settingsValues.blue_red = Random.Range(-2f, 2f);
         settingsValues.blue_yellow = Random.Range(-2f, 2f);
     }
+
+    void RandomizeRanges(){
+        settingsValues.green_green_range = Random.Range(0f, 1000f);
+        settingsValues.green_red_range = Random.Range(0f, 1000f);
+        settingsValues.green_yellow_range = Random.Range(0f, 1000f);
+        settingsValues.green_blue_range = Random.Range(0f, 1000f);
+        settingsValues.red_red_range = Random.Range(0f, 1000f);
+        settingsValues.red_green_range = Random.Range(0f, 1000f);
+        settingsValues.red_yellow_range = Random.Range(0f, 1000f);
+        settingsValues.red_blue_range = Random.Range(0f, 1000f);
+        settingsValues.yellow_yellow_range = Random.Range(0f, 1000f);
+        settingsValues.yellow_green_range = Random.Range(0f, 1000f);
+        settingsValues.yellow_red_range = Random.Range(0f, 1000f);
+        settingsValues.yellow_blue_range = Random.Range(0f, 1000f);
+        settingsValues.blue_blue_range = Random.Range(0f, 1000f);
+        settingsValues.blue_green_range = Random.Range(0f, 1000f);
+        settingsValues.blue_red_range = Random.Range(0f, 1000f);
+        settingsValues.blue_yellow_range = Random.Range(0f, 1000f);
+    }
     void updateCount()
     {
         Debug.Log("Resetting count");
@@ -165,8 +186,11 @@ public class movement : MonoBehaviour
         {
             for (int j = 0; j < particleArray[i].Length; j++)
             {
-                GameObject go = particleDict[particleArray[i][j].objID];
-                GameObject.Destroy(go); //TODO
+                // check if it is a real particle or a placeholder
+                if (particleArray[i][j].objID != 0){
+                    GameObject go = particleDict[particleArray[i][j].objID];
+                    GameObject.Destroy(go); 
+                }
             }
         }
 
@@ -195,6 +219,11 @@ public class movement : MonoBehaviour
             particleDict.Add(go.GetInstanceID(), go);
         }
 
+        if (number == 0){
+            result = new Particle[1];
+            result[0] = new Particle(0f,0f, 100000f, 100000f, 0f, 0f, color, 0);
+        }
+
         return result;
     }
     Particle[] CreateDebug(int number, Color color)
@@ -217,14 +246,20 @@ public class movement : MonoBehaviour
         return result;
     }
 
+    /**
+    * Draw the particles on the screen
+    */
     void draw()
     {
         for (int i = 0; i < particleArray.Length; i++)
         {
             for (int j = 0; j < particleArray[i].Length; j++)
             {
-                GameObject go = particleDict[particleArray[i][j].objID];
-                go.transform.position = new Vector3(particleArray[i][j].x, particleArray[i][j].y, 0f);
+                // check if it is a real particle or a placeholder
+                if (particleArray[i][j].objID != 0){
+                    GameObject go = particleDict[particleArray[i][j].objID];
+                    go.transform.position = new Vector3(particleArray[i][j].x, particleArray[i][j].y, 0f);
+                }
             }
         }
     }
@@ -347,22 +382,22 @@ public class movement : MonoBehaviour
 
     void GPURender(){
             Rule[] ruleArray = {
-                new Rule(0, 0, settingsValues.yellow_yellow * settingsValues.gravity, settingsValues.damping),
-                new Rule(0, 1, settingsValues.yellow_red * settingsValues.gravity, settingsValues.damping),
-                new Rule(0, 2, settingsValues.yellow_green * settingsValues.gravity, settingsValues.damping),
-                new Rule(0, 3, settingsValues.yellow_blue * settingsValues.gravity, settingsValues.damping),
-                new Rule(1, 1, settingsValues.red_red * settingsValues.gravity, settingsValues.damping),
-                new Rule(1, 2, settingsValues.red_green * settingsValues.gravity, settingsValues.damping),
-                new Rule(1, 0, settingsValues.red_yellow * settingsValues.gravity, settingsValues.damping),
-                new Rule(1, 3, settingsValues.red_blue * settingsValues.gravity, settingsValues.damping),
-                new Rule(2, 2, settingsValues.green_green * settingsValues.gravity, settingsValues.damping),
-                new Rule(2, 1, settingsValues.green_red * settingsValues.gravity, settingsValues.damping),
-                new Rule(2, 0, settingsValues.green_yellow * settingsValues.gravity, settingsValues.damping),
-                new Rule(2, 3, settingsValues.green_blue * settingsValues.gravity, settingsValues.damping),
-                new Rule(3, 3, settingsValues.blue_blue * settingsValues.gravity, settingsValues.damping),
-                new Rule(3, 2, settingsValues.blue_green * settingsValues.gravity, settingsValues.damping),
-                new Rule(3, 1, settingsValues.blue_red * settingsValues.gravity, settingsValues.damping),
-                new Rule(3, 0, settingsValues.blue_yellow * settingsValues.gravity, settingsValues.damping)
+                new Rule(0, 0, settingsValues.yellow_yellow * settingsValues.gravity, settingsValues.damping, settingsValues.yellow_yellow_range),
+                new Rule(0, 1, settingsValues.yellow_red * settingsValues.gravity, settingsValues.damping, settingsValues.yellow_red_range),
+                new Rule(0, 2, settingsValues.yellow_green * settingsValues.gravity, settingsValues.damping, settingsValues.yellow_green_range),
+                new Rule(0, 3, settingsValues.yellow_blue * settingsValues.gravity, settingsValues.damping, settingsValues.yellow_blue_range),
+                new Rule(1, 1, settingsValues.red_red * settingsValues.gravity, settingsValues.damping, settingsValues.red_red_range),
+                new Rule(1, 2, settingsValues.red_green * settingsValues.gravity, settingsValues.damping, settingsValues.red_green_range),
+                new Rule(1, 0, settingsValues.red_yellow * settingsValues.gravity, settingsValues.damping, settingsValues.red_yellow_range),
+                new Rule(1, 3, settingsValues.red_blue * settingsValues.gravity, settingsValues.damping, settingsValues.red_blue_range),
+                new Rule(2, 2, settingsValues.green_green * settingsValues.gravity, settingsValues.damping, settingsValues.green_green_range),
+                new Rule(2, 1, settingsValues.green_red * settingsValues.gravity, settingsValues.damping, settingsValues.green_red_range),
+                new Rule(2, 0, settingsValues.green_yellow * settingsValues.gravity, settingsValues.damping, settingsValues.green_yellow_range),
+                new Rule(2, 3, settingsValues.green_blue * settingsValues.gravity, settingsValues.damping, settingsValues.green_blue_range),
+                new Rule(3, 3, settingsValues.blue_blue * settingsValues.gravity, settingsValues.damping, settingsValues.blue_blue_range),
+                new Rule(3, 2, settingsValues.blue_green * settingsValues.gravity, settingsValues.damping, settingsValues.blue_green_range),
+                new Rule(3, 1, settingsValues.blue_red * settingsValues.gravity, settingsValues.damping, settingsValues.blue_red_range),
+                new Rule(3, 0, settingsValues.blue_yellow * settingsValues.gravity, settingsValues.damping, settingsValues.blue_yellow_range)
             };
 
             ComputeBuffer ruleBuffer = new ComputeBuffer(ruleArray.Length, System.Runtime.InteropServices.Marshal.SizeOf(typeof(Rule)));
@@ -390,6 +425,8 @@ public class movement : MonoBehaviour
             ComputeBuffer yellowBuffer = new ComputeBuffer(yellowArray.Length, particleSize);
             ComputeBuffer blueBuffer = new ComputeBuffer(blueArray.Length, particleSize);
 
+            int maxBuffer = Mathf.Max(greenArray.Length, redArray.Length, yellowArray.Length, blueArray.Length);
+
             // set buffers
             greenBuffer.SetData(greenArray);
             redBuffer.SetData(redArray);
@@ -405,7 +442,7 @@ public class movement : MonoBehaviour
             computeShader.SetFloats("dimensions", new float[] {HEIGHT, WIDTH});
             computeShader.SetFloat("radius", radius);
 
-            computeShader.Dispatch(0, greenArray.Length / 8, greenArray.Length / 8, 1);
+            computeShader.Dispatch(0, maxBuffer / 8, maxBuffer / 8, 1);
 
             // get data back
             greenBuffer.GetData(greenArray);
