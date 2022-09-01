@@ -77,12 +77,14 @@ public class movement : MonoBehaviour
         uint color1;
         uint color2;
         float force;
+        float dampening;
 
-        public Rule(uint color1, uint color2, float force)
+        public Rule(uint color1, uint color2, float force, float dampening)
         {
             this.color1 = color1;
             this.color2 = color2;
             this.force = force;
+            this.dampening = dampening;
         }
     };
 
@@ -345,22 +347,22 @@ public class movement : MonoBehaviour
 
     void GPURender(){
             Rule[] ruleArray = {
-                new Rule(0, 0, settingsValues.yellow_yellow * settingsValues.gravity),
-                new Rule(0, 1, settingsValues.yellow_red * settingsValues.gravity),
-                new Rule(0, 2, settingsValues.yellow_green * settingsValues.gravity),
-                new Rule(0, 3, settingsValues.yellow_blue * settingsValues.gravity),
-                new Rule(1, 1, settingsValues.red_red * settingsValues.gravity),
-                new Rule(1, 2, settingsValues.red_green * settingsValues.gravity),
-                new Rule(1, 0, settingsValues.red_yellow * settingsValues.gravity),
-                new Rule(1, 3, settingsValues.red_blue * settingsValues.gravity),
-                new Rule(2, 2, settingsValues.green_green * settingsValues.gravity),
-                new Rule(2, 1, settingsValues.green_red * settingsValues.gravity),
-                new Rule(2, 0, settingsValues.green_yellow * settingsValues.gravity),
-                new Rule(2, 3, settingsValues.green_blue * settingsValues.gravity),
-                new Rule(3, 3, settingsValues.blue_blue * settingsValues.gravity),
-                new Rule(3, 2, settingsValues.blue_green * settingsValues.gravity),
-                new Rule(3, 1, settingsValues.blue_red * settingsValues.gravity),
-                new Rule(3, 0, settingsValues.blue_yellow * settingsValues.gravity)
+                new Rule(0, 0, settingsValues.yellow_yellow * settingsValues.gravity, settingsValues.damping),
+                new Rule(0, 1, settingsValues.yellow_red * settingsValues.gravity, settingsValues.damping),
+                new Rule(0, 2, settingsValues.yellow_green * settingsValues.gravity, settingsValues.damping),
+                new Rule(0, 3, settingsValues.yellow_blue * settingsValues.gravity, settingsValues.damping),
+                new Rule(1, 1, settingsValues.red_red * settingsValues.gravity, settingsValues.damping),
+                new Rule(1, 2, settingsValues.red_green * settingsValues.gravity, settingsValues.damping),
+                new Rule(1, 0, settingsValues.red_yellow * settingsValues.gravity, settingsValues.damping),
+                new Rule(1, 3, settingsValues.red_blue * settingsValues.gravity, settingsValues.damping),
+                new Rule(2, 2, settingsValues.green_green * settingsValues.gravity, settingsValues.damping),
+                new Rule(2, 1, settingsValues.green_red * settingsValues.gravity, settingsValues.damping),
+                new Rule(2, 0, settingsValues.green_yellow * settingsValues.gravity, settingsValues.damping),
+                new Rule(2, 3, settingsValues.green_blue * settingsValues.gravity, settingsValues.damping),
+                new Rule(3, 3, settingsValues.blue_blue * settingsValues.gravity, settingsValues.damping),
+                new Rule(3, 2, settingsValues.blue_green * settingsValues.gravity, settingsValues.damping),
+                new Rule(3, 1, settingsValues.blue_red * settingsValues.gravity, settingsValues.damping),
+                new Rule(3, 0, settingsValues.blue_yellow * settingsValues.gravity, settingsValues.damping)
             };
 
             ComputeBuffer ruleBuffer = new ComputeBuffer(ruleArray.Length, System.Runtime.InteropServices.Marshal.SizeOf(typeof(Rule)));
@@ -441,6 +443,9 @@ public class movement : MonoBehaviour
                 particleArray[i][j].vy = particleArray[i][j].vy * settingsValues.damping;
                 particleArray[i][j].x += particleArray[i][j].vx;
                 particleArray[i][j].y += particleArray[i][j].vy;
+
+                // particleArray[i][j].vx = (particleArray[i][j].vx + (particleArray[i][j].fx * )) * settingsValues.damping;
+                // particleArray[i][j].vy = (particleArray[i][j].vy + (particleArray[i][j].fy * settingsValues.damping)) * settingsValues.damping;
 
                 // if a particle is on the edge loop it around
                 if (particleArray[i][j].x > settingsValues.xMax){

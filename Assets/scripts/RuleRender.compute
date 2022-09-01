@@ -1,0 +1,155 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+int getDirection(float a, float b, float dim);
+ 
+// #define Particle4 matrix <Particle, 4, 1> 
+
+struct Particle{
+    float2 force;
+    float2 position;
+    float2 velocity;
+    float4 color;
+    int objID;
+    // float2 pad2;
+};
+
+// typedef matrix <Particle, 4> ParticleMatrix;
+
+// color 1: yellow 2: red 3: green 4: blue
+struct Rule{
+    uint color1;
+    uint color2;
+    float force;
+    float dampening;
+};
+
+RWStructuredBuffer<Particle> yellow;
+RWStructuredBuffer<Particle> red;
+RWStructuredBuffer<Particle> green;
+RWStructuredBuffer<Particle> blue;
+
+StructuredBuffer<Rule> rules;
+
+float2 dimensions;
+float radius;
+
+// RWStructuredBuffer<Particle> particles[4];
+// Particle particles[4][256];
+
+// Particle4 particles;
+
+// sizeof(Particle);
+
+
+
+[numthreads(8,8,16)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    RWStructuredBuffer<Particle> particles[4] = {yellow, red, green, blue};
+    // TODO: insert actual code here!
+    // Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+
+    // get all the yellow particles
+
+    Rule currentRule = rules[id.z];
+
+    Particle a;
+    Particle b;
+
+    uint colorIndex1 = currentRule.color1;
+    uint colorIndex2 = currentRule.color2;
+
+    if (currentRule.color1 == 0) {
+        a = particles[0][id.x];
+    }
+    else if (currentRule.color1 == 1) {
+        a = particles[1][id.x];
+    }
+    else if (currentRule.color1 == 2) {
+        a = particles[2][id.x];
+    }
+    else if (currentRule.color1 == 3) {
+        a = particles[3][id.x];
+    }
+
+    if (currentRule.color2 == 0) {
+        b = particles[0][id.y];
+    }
+    else if (currentRule.color2 == 1) {
+        b = particles[1][id.y];
+    }
+    else if (currentRule.color2 == 2) {
+        b = particles[2][id.y];
+    }
+    else if (currentRule.color2 == 3) {
+        b = particles[3][id.y];
+    }
+
+    float dx = abs(b.position.x - a.position.x);
+    float dy = abs(b.position.y -a.position.y);
+
+    if (dx > dimensions.x / 2) {
+        dx = dimensions.x - dx;
+    }
+    if (dy > dimensions.y / 2) {
+        dy = dimensions.y - dy;
+    }
+    float distance = sqrt(dx * dx + dy * dy);
+
+    dx = dx * getDirection(a.position.x, b.position.x, dimensions.x);
+    dy = dy * getDirection(a.position.y, b.position.y, dimensions.y);
+
+    if (distance > 0 && distance < radius){
+        a.force.x += dx / distance;
+        a.force.y += dy / distance;
+        float force =  currentRule.force * (1 / (distance));
+        a.velocity.x += (force * dx);
+        a.velocity.y += (force * dy);
+    }
+
+    // if (id.x == 0) {
+    // a.velocity.x = (a.velocity.x + (a.force.x * currentRule.force)) * currentRule.dampening;
+    // a.velocity.y = (a.velocity.y + (a.force.y * currentRule.force)) * currentRule.dampening;
+    // a.force.x = 0;
+    // a.force.y = 0;
+    // a.position.x += a.velocity.x;
+    // a.position.y += a.velocity.y;
+    // }
+
+    // a.velocity.x = distance;
+    // a.velocity.y = -distance;
+
+    if (currentRule.color1 == 0) {
+        yellow[id.x] = a;
+    } else if (currentRule.color1 == 1) {
+        red[id.x] = a;
+    } else if (currentRule.color1 == 2) {
+        green[id.x] = a;
+    } else if (currentRule.color1 == 3) {
+        blue[id.x] = a;
+    }
+
+}
+
+
+int getDirection(float a, float b, float dim) {
+    if (a < b){
+            float d1 = b - a;
+            float d2 = (dim - b) + a;
+            if (d1 < d2){
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        else{
+            float d1 = a - b;
+            float d2 = (dim - a) + b;
+            if (d1 < d2){
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+}
