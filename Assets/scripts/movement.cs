@@ -23,6 +23,8 @@ public class movement : MonoBehaviour
     private float WIDTH;
     private float HEIGHT;
 
+    private Dictionary<int, GameObject> particleDict = new Dictionary<int, GameObject>();
+
     public struct Particle
     {
         public float fx;
@@ -32,9 +34,9 @@ public class movement : MonoBehaviour
         public float vx;
         public float vy;
         public Color color;
-        public GameObject obj;
+        public int objID;
 
-        public Particle(float fx, float fy, float x, float y, float vx, float vy, Color color, GameObject obj)
+        public Particle(float fx, float fy, float x, float y, float vx, float vy, Color color, int obj)
         {
             this.fx = fx;
             this.fy = fy;
@@ -43,7 +45,7 @@ public class movement : MonoBehaviour
             this.vx = vx;
             this.vy = vy;
             this.color = color;
-            this.obj = obj;
+            this.objID = obj;
         }
     }
 
@@ -136,34 +138,37 @@ public class movement : MonoBehaviour
 
     }
     void RandomizeConnections(){
-        settingsValues.green_green = Random.Range(-1f, 1f);
-        settingsValues.green_red = Random.Range(-1f, 1f);
-        settingsValues.green_yellow = Random.Range(-1f, 1f);
-        settingsValues.green_blue = Random.Range(-1f, 1f);
-        settingsValues.red_red = Random.Range(-1f, 1f);
-        settingsValues.red_green = Random.Range(-1f, 1f);
-        settingsValues.red_yellow = Random.Range(-1f, 1f);
-        settingsValues.red_blue = Random.Range(-1f, 1f);
-        settingsValues.yellow_yellow = Random.Range(-1f, 1f);
-        settingsValues.yellow_green = Random.Range(-1f, 1f);
-        settingsValues.yellow_red = Random.Range(-1f, 1f);
-        settingsValues.yellow_blue = Random.Range(-1f, 1f);
-        settingsValues.blue_blue = Random.Range(-1f, 1f);
-        settingsValues.blue_green = Random.Range(-1f, 1f);
-        settingsValues.blue_red = Random.Range(-1f, 1f);
-        settingsValues.blue_yellow = Random.Range(-1f, 1f);
+        settingsValues.green_green = Random.Range(-2f, 2f);
+        settingsValues.green_red = Random.Range(-2f, 2f);
+        settingsValues.green_yellow = Random.Range(-2f, 2f);
+        settingsValues.green_blue = Random.Range(-2f, 2f);
+        settingsValues.red_red = Random.Range(-2f, 2f);
+        settingsValues.red_green = Random.Range(-2f, 2f);
+        settingsValues.red_yellow = Random.Range(-2f, 2f);
+        settingsValues.red_blue = Random.Range(-2f, 2f);
+        settingsValues.yellow_yellow = Random.Range(-2f, 2f);
+        settingsValues.yellow_green = Random.Range(-2f, 2f);
+        settingsValues.yellow_red = Random.Range(-2f, 2f);
+        settingsValues.yellow_blue = Random.Range(-2f, 2f);
+        settingsValues.blue_blue = Random.Range(-2f, 2f);
+        settingsValues.blue_green = Random.Range(-2f, 2f);
+        settingsValues.blue_red = Random.Range(-2f, 2f);
+        settingsValues.blue_yellow = Random.Range(-2f, 2f);
     }
     void updateCount()
     {
-        Debug.Log("Updating count");
+        Debug.Log("Resetting count");
 
         for (int i = 0; i < particleArray.Length; i++)
         {
             for (int j = 0; j < particleArray[i].Length; j++)
             {
-                GameObject.Destroy(particleArray[i][j].obj);
+                GameObject go = particleDict[particleArray[i][j].objID];
+                GameObject.Destroy(go); //TODO
             }
         }
+
+        particleDict.Clear();
 
         yellowArray = Create(settingsValues.yellow_count, Color.yellow);
         redArray = Create(settingsValues.red_count, Color.red);
@@ -184,7 +189,8 @@ public class movement : MonoBehaviour
             GameObject go = Instantiate(particleObj, new Vector3(Random.Range(settingsValues.xMin, settingsValues.xMax), Random.Range(settingsValues.yMin, settingsValues.yMax), 0f), Quaternion.identity);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            result[i] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0f, 0f, color, go);
+            result[i] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0f, 0f, color, go.GetInstanceID());
+            particleDict.Add(go.GetInstanceID(), go);
         }
 
         return result;
@@ -198,12 +204,12 @@ public class movement : MonoBehaviour
             GameObject go = Instantiate(particleObj, new Vector3(950, 500f, 0f), Quaternion.identity);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            result[0] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go);
+            result[0] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go.GetInstanceID());
 
             go = Instantiate(particleObj, new Vector3(-800, 500f, 0f), Quaternion.identity);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            result[1] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go);
+            result[1] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0, 0, color, go.GetInstanceID());
         
 
         return result;
@@ -215,7 +221,8 @@ public class movement : MonoBehaviour
         {
             for (int j = 0; j < particleArray[i].Length; j++)
             {
-                particleArray[i][j].obj.transform.position = new Vector3(particleArray[i][j].x, particleArray[i][j].y, 0f);
+                GameObject go = particleDict[particleArray[i][j].objID];
+                go.transform.position = new Vector3(particleArray[i][j].x, particleArray[i][j].y, 0f);
             }
         }
     }
@@ -360,20 +367,20 @@ public class movement : MonoBehaviour
             ruleBuffer.SetData(ruleArray);
             computeShader.SetBuffer(0, "rules", ruleBuffer);
 
-            int particleSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(GPUParticle));
+            int particleSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(Particle));
 
             // convert particle array to gpu particle array
-            GPUParticle[] gpuGreenArray = new GPUParticle[greenArray.Length];
-            GPUParticle[] gpuRedArray = new GPUParticle[redArray.Length];
-            GPUParticle[] gpuYellowArray = new GPUParticle[yellowArray.Length];
-            GPUParticle[] gpuBlueArray = new GPUParticle[blueArray.Length];
-            for (int i = 0; i < greenArray.Length; i++)
-            {
-                gpuGreenArray[i] = new GPUParticle(greenArray[i]);
-                gpuRedArray[i] = new GPUParticle(redArray[i]);
-                gpuYellowArray[i] = new GPUParticle(yellowArray[i]);
-                gpuBlueArray[i] = new GPUParticle(blueArray[i]);
-            }
+            // GPUParticle[] gpuGreenArray = new GPUParticle[greenArray.Length];
+            // GPUParticle[] gpuRedArray = new GPUParticle[redArray.Length];
+            // GPUParticle[] gpuYellowArray = new GPUParticle[yellowArray.Length];
+            // GPUParticle[] gpuBlueArray = new GPUParticle[blueArray.Length];
+            // for (int i = 0; i < greenArray.Length; i++)
+            // {
+            //     gpuGreenArray[i] = new GPUParticle(greenArray[i]);
+            //     gpuRedArray[i] = new GPUParticle(redArray[i]);
+            //     gpuYellowArray[i] = new GPUParticle(yellowArray[i]);
+            //     gpuBlueArray[i] = new GPUParticle(blueArray[i]);
+            // }
 
             // create buffers
             ComputeBuffer greenBuffer = new ComputeBuffer(greenArray.Length, particleSize);
@@ -382,10 +389,10 @@ public class movement : MonoBehaviour
             ComputeBuffer blueBuffer = new ComputeBuffer(blueArray.Length, particleSize);
 
             // set buffers
-            greenBuffer.SetData(gpuGreenArray);
-            redBuffer.SetData(gpuRedArray);
-            yellowBuffer.SetData(gpuYellowArray);
-            blueBuffer.SetData(gpuBlueArray);
+            greenBuffer.SetData(greenArray);
+            redBuffer.SetData(redArray);
+            yellowBuffer.SetData(yellowArray);
+            blueBuffer.SetData(blueArray);
 
             // set shader buffers
             computeShader.SetBuffer(0, "green", greenBuffer);
@@ -399,10 +406,10 @@ public class movement : MonoBehaviour
             computeShader.Dispatch(0, greenArray.Length / 8, greenArray.Length / 8, 1);
 
             // get data back
-            greenBuffer.GetData(gpuGreenArray);
-            redBuffer.GetData(gpuRedArray);
-            yellowBuffer.GetData(gpuYellowArray);
-            blueBuffer.GetData(gpuBlueArray);
+            greenBuffer.GetData(greenArray);
+            redBuffer.GetData(redArray);
+            yellowBuffer.GetData(yellowArray);
+            blueBuffer.GetData(blueArray);
             
             // release buffers
             greenBuffer.Release();
@@ -411,17 +418,17 @@ public class movement : MonoBehaviour
             blueBuffer.Release();
             ruleBuffer.Release();
 
-            for (int i = 0; i < greenArray.Length; i++)
-            {
-                greenArray[i].vx = gpuGreenArray[i].vx;
-                greenArray[i].vy = gpuGreenArray[i].vy;
-                redArray[i].vx = gpuRedArray[i].vx;
-                redArray[i].vy = gpuRedArray[i].vy;
-                yellowArray[i].vx = gpuYellowArray[i].vx;
-                yellowArray[i].vy = gpuYellowArray[i].vy;
-                blueArray[i].vx = gpuBlueArray[i].vx;
-                blueArray[i].vy = gpuBlueArray[i].vy;
-            }
+            // for (int i = 0; i < greenArray.Length; i++)
+            // {
+            //     greenArray[i].vx = gpuGreenArray[i].vx;
+            //     greenArray[i].vy = gpuGreenArray[i].vy;
+            //     redArray[i].vx = gpuRedArray[i].vx;
+            //     redArray[i].vy = gpuRedArray[i].vy;
+            //     yellowArray[i].vx = gpuYellowArray[i].vx;
+            //     yellowArray[i].vy = gpuYellowArray[i].vy;
+            //     blueArray[i].vx = gpuBlueArray[i].vx;
+            //     blueArray[i].vy = gpuBlueArray[i].vy;
+            // }
 
             updateVelocityAndPositionGPU();
 

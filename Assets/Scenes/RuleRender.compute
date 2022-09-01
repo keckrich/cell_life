@@ -6,10 +6,12 @@ int getDirection(float a, float b, float dim);
 // #define Particle4 matrix <Particle, 4, 1> 
 
 struct Particle{
-    // float2 force;
+    float2 force;
     float2 position;
     float2 velocity;
-    // float pad1;
+    float4 color;
+    int objID;
+    // float2 pad2;
 };
 
 // typedef matrix <Particle, 4> ParticleMatrix;

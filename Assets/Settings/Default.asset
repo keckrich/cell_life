@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   darkTheme: 0
-  yellow_count: 200
-  red_count: 200
-  green_count: 200
-  blue_count: 200
+  yellow_count: 256
+  red_count: 256
+  green_count: 256
+  blue_count: 256
   gravity: 0.695
   damping: 0.535
   yMin: -540
