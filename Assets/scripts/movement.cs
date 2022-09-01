@@ -439,7 +439,7 @@ public class movement : MonoBehaviour
             computeShader.SetBuffer(0, "yellow", yellowBuffer);
             computeShader.SetBuffer(0, "blue", blueBuffer);
 
-            computeShader.SetFloats("dimensions", new float[] {HEIGHT, WIDTH});
+            computeShader.SetFloats("dimensions", new float[] {WIDTH, HEIGHT});
             computeShader.SetFloat("radius", radius);
 
             computeShader.Dispatch(0, maxBuffer / 8, maxBuffer / 8, 1);
