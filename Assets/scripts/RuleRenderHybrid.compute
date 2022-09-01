@@ -1,0 +1,86 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+int getDirection(float a, float b, float dim);
+ 
+// #define Particle4 matrix <Particle, 4, 1> 
+
+struct Particle{
+    float2 force;
+    float2 position;
+    float2 velocity;
+    float4 color;
+    int objID;
+    // float2 pad2;
+};
+
+struct Rule{
+    float range;
+    float g;
+    float fx;
+    float fy;
+    Particle p;
+};
+
+RWStructuredBuffer<Particle> ParticleArray;
+RWStructuredBuffer<Rule> rules;
+
+float2 dimensions;
+
+[numthreads(8,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+    Rule rule = rules[0];
+
+    Particle a = rule.p;
+    Particle b = ParticleArray[id.x];
+
+    if (b.objID == 0) return;
+
+
+    float dx = abs(b.position.x - a.position.x);
+    float dy = abs(b.position.y -a.position.y);
+
+    if (dx > dimensions.x / 2) {
+        dx = dimensions.x - dx;
+    }
+    if (dy > dimensions.y / 2) {
+        dy = dimensions.y - dy;
+    }
+    float distance = sqrt(dx * dx + dy * dy);
+
+    dx = dx * getDirection(a.position.x, b.position.x, dimensions.x);
+    dy = dy * getDirection(a.position.y, b.position.y, dimensions.y);
+
+    if (distance > 0 && distance < rule.range) {
+        float force =  rule.g * (1 / distance);
+        rule.fx += (force * dx);
+        rule.fy += (force * dy);
+    }
+
+    rules[0].p = a;
+
+}
+
+
+int getDirection(float a, float b, float dim) {
+    if (a < b){
+            float d1 = b - a;
+            float d2 = (dim - b) + a;
+            if (d1 < d2){
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        else{
+            float d1 = a - b;
+            float d2 = (dim - a) + b;
+            if (d1 < d2){
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+}

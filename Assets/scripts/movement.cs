@@ -19,6 +19,7 @@ public class movement : MonoBehaviour
     Particle[][] particleArray;
 
     public ComputeShader computeShader;
+    public ComputeShader computeShaderHybrid;
 
     private float WIDTH;
     private float HEIGHT;
@@ -72,6 +73,22 @@ public class movement : MonoBehaviour
             this.vy = p.vy;
         }
     }
+
+    public struct HybridRule{
+        public float range;
+        public float g;
+        public float fx;
+        public float fy;
+        public Particle p;
+        
+        public HybridRule(float range, float g, float fx, float fy, Particle p){
+            this.range = range;
+            this.g = g;
+            this.fx = fx;
+            this.fy = fy;
+            this.p = p;
+        }
+    };
 
     struct Rule{
         uint color1;
@@ -334,6 +351,40 @@ public class movement : MonoBehaviour
 
         }
     }
+    public void ruleHybrid(Particle[] particlesA, Particle[] particlesB, float g, float range)
+    {
+    
+        for (int i = 0; i < particlesA.Length; i++)
+        {
+            // continue if the particle is a placeholder
+            if (particlesA[i].objID == 0 || particlesB.Length == 0 || particlesB[0].objID == 0){ 
+                continue;
+            }
+
+            HybridRule hybridRule = new HybridRule(range, g, 0, 0, particlesA[i]);
+            HybridRule[] hybridRuleArray = new HybridRule[1];
+            hybridRuleArray[0] = hybridRule;
+
+            ComputeBuffer particleBuffer = new ComputeBuffer(particlesB.Length, System.Runtime.InteropServices.Marshal.SizeOf(typeof(Particle)));
+            ComputeBuffer hybridRuleBuffer = new ComputeBuffer(1, System.Runtime.InteropServices.Marshal.SizeOf(hybridRule));
+
+            particleBuffer.SetData(particlesB);
+            hybridRuleBuffer.SetData(hybridRuleArray);
+
+            computeShaderHybrid.SetBuffer(0, "ParticleArray", particleBuffer);
+            computeShaderHybrid.SetBuffer(0, "rules", hybridRuleBuffer);
+            computeShaderHybrid.SetFloats("dimensions", new float[] {WIDTH, HEIGHT});
+
+            computeShaderHybrid.Dispatch(0, particlesB.Length / 8, 1, 1);
+
+            particleBuffer.GetData(particlesB);
+            hybridRuleBuffer.GetData(hybridRuleArray);
+
+
+            particlesA[i].fx += hybridRuleArray[0].fx;
+            particlesA[i].fy += hybridRuleArray[0].fy;
+        }
+    }
 
     // return 1 if right/up and -1 if left/down
     int getDirection(float a, float b, float dim){
@@ -376,6 +427,29 @@ public class movement : MonoBehaviour
         rule(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity);
         rule(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity);
         rule(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity);
+
+        updateVelocityAndPosition();
+    }
+
+    void HybridRender(){
+        resetForce();
+
+        ruleHybrid(yellowArray, yellowArray, settingsValues.yellow_yellow * settingsValues.gravity, settingsValues.yellow_yellow_range);
+        ruleHybrid(yellowArray, redArray, settingsValues.yellow_red * settingsValues.gravity, settingsValues.yellow_red_range);
+        ruleHybrid(yellowArray, greenArray, settingsValues.yellow_green * settingsValues.gravity, settingsValues.yellow_green_range);
+        ruleHybrid(yellowArray, blueArray, settingsValues.yellow_blue * settingsValues.gravity, settingsValues.yellow_blue_range);
+        ruleHybrid(redArray, redArray, settingsValues.red_red * settingsValues.gravity, settingsValues.red_red_range);
+        ruleHybrid(redArray, greenArray, settingsValues.red_green * settingsValues.gravity, settingsValues.red_green_range);
+        ruleHybrid(redArray, yellowArray, settingsValues.red_yellow * settingsValues.gravity, settingsValues.red_yellow_range);
+        ruleHybrid(redArray, blueArray, settingsValues.red_blue * settingsValues.gravity, settingsValues.red_blue_range);
+        ruleHybrid(greenArray, greenArray, settingsValues.green_green * settingsValues.gravity, settingsValues.green_green_range);
+        ruleHybrid(greenArray, redArray, settingsValues.green_red * settingsValues.gravity, settingsValues.green_red_range);
+        ruleHybrid(greenArray, yellowArray, settingsValues.green_yellow * settingsValues.gravity, settingsValues.green_yellow_range);
+        ruleHybrid(greenArray, blueArray, settingsValues.green_blue * settingsValues.gravity, settingsValues.green_blue_range);
+        ruleHybrid(blueArray, blueArray, settingsValues.blue_blue * settingsValues.gravity, settingsValues.blue_blue_range);
+        ruleHybrid(blueArray, greenArray, settingsValues.blue_green * settingsValues.gravity, settingsValues.blue_green_range);
+        ruleHybrid(blueArray, redArray, settingsValues.blue_red * settingsValues.gravity, settingsValues.blue_red_range);
+        ruleHybrid(blueArray, yellowArray, settingsValues.blue_yellow * settingsValues.gravity, settingsValues.blue_yellow_range);
 
         updateVelocityAndPosition();
     }
