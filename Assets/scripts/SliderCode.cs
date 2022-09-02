@@ -22,7 +22,9 @@ public class SliderCode : MonoBehaviour
     void Start()
     {
 
-        text.text = "";
+        // text.text = "";
+        //set text to slider value
+        text.text = slider.value.ToString();
 
         slider.onValueChanged.AddListener((v) =>
         {

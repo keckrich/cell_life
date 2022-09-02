@@ -1,4 +1,5 @@
 using UnityEngine;
+// using UnityEngine.JSONSerializeModule;
 
 [CreateAssetMenu(menuName = "My Assets/Setttings")]
 [System.Serializable]
@@ -13,6 +14,7 @@ public class Settings : ScriptableObject
 
     [Range(0, 1)] public float gravity = 1f;
     [Range(0, 1)] public float damping = 1f;
+    [Range(0, 0.2f)] public float speed = 1f;
 
     [HideInInspector]
     public float yMin = -540.0f;
@@ -59,7 +61,7 @@ public class Settings : ScriptableObject
     [Range(0, 1000)] public float blue_red_range = 100f;
     [Range(0, 1000)] public float blue_yellow_range = 100f;
     [Range(0, 1000)] public float blue_green_range = 100f;
-    
+
 
     #endregion
 
@@ -104,6 +106,7 @@ public class Settings : ScriptableObject
         // validateEvent();
     }
     #region getters and setters
+
     public int getYellow_count()
     {
         return this.yellow_count;
@@ -137,4 +140,5 @@ public class Settings : ScriptableObject
         this.blue_count = blue_count;
     }
     #endregion
+
 }

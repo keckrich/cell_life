@@ -6,6 +6,7 @@ public class movement : MonoBehaviour
 {
 
     public int seed = 222;
+    int count = 0;
 
     public float radius = 2000f;
     public Settings settingsValues;
@@ -113,6 +114,8 @@ public class movement : MonoBehaviour
         WIDTH = settingsValues.xMax - settingsValues.xMin;
         HEIGHT = settingsValues.yMax - settingsValues.yMin;
 
+        string[] split = "test".Split('_');
+
         settingsValues.RegisterResetPosEvent(updateCount);
         settingsValues.RegisterRandomizePosEvent(RandomizeConnections);
         // settingsValues.RegisterGPUEvent(expDist);
@@ -133,10 +136,19 @@ public class movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // CPURender(); 
-        GPURender();
-        // HybridRender();
-        draw();
+        if (count >= (settingsValues.speed * 100)){
+            count = 0;
+
+
+            // CPURender(); 
+            GPURender();
+            // HybridRender();
+            draw();
+
+
+
+        }
+        else count++;
     }
 
     void resetPos()
