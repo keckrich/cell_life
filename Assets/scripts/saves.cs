@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using TMPro;
 
 public class saves : MonoBehaviour
 {
@@ -11,13 +12,22 @@ public class saves : MonoBehaviour
 
     Dictionary<int, string> saveFiles = new Dictionary<int, string>();
 
+    public TMP_Dropdown dropdown;
+  
+
+   
+
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        LoadSaveName();
+        AddSaveFilesToDropdown();
+
+        dropdown.onValueChanged.AddListener(o => this.fileName = dropdown.captionText.text);
     }
 
     // Update is called once per frame
@@ -63,6 +73,10 @@ public class saves : MonoBehaviour
         }
     }
 
+    public void LoadSettings()
+    {
+        LoadSettings(this.fileName);
+    }
     void LoadSaveName(){
         // load all save files
         // string[] files = System.IO.Directory.GetFiles(Application.dataPath + "/saves/");
@@ -71,14 +85,19 @@ public class saves : MonoBehaviour
         // add all save files to dictionary
         foreach (string file in files)
         {
-            string[] split = file.Split('/');
-            string[] split2 = split[split.Length - 1].Split('.');
-            int count = 0;
+            saveFiles.Add(saveFiles.Count, file);
+        }
+    }
 
-            if (int.TryParse(split2[0], out count))
-            {
-                saveFiles.Add(count, split2[0]);
-            }
+    // add the save files to the dropdown
+    public void AddSaveFilesToDropdown(){
+        // clear the dropdown
+        dropdown.ClearOptions();
+
+        // add all save files to dropdown
+        foreach (KeyValuePair<int, string> file in saveFiles)
+        {
+            dropdown.options.Add(new TMP_Dropdown.OptionData(file.Value.Split('/')[file.Value.Split('/').Length - 1].Split('.')[0]));
         }
     }
 
@@ -92,5 +111,6 @@ public class saves : MonoBehaviour
     {
         this.fileName = fileName;
     }
+
     #endregion
 }

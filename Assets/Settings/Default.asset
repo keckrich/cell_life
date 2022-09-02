@@ -13,18 +13,17 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   darkTheme: 1
-  yellow_count: 512
-  red_count: 512
-  green_count: 512
-  blue_count: 199
+  yellow_count: 702
+  red_count: 503
+  green_count: 413
+  blue_count: 340
   gravity: 0.009
   damping: 0.813
-  speed: 0
+  speed: 0.088
   yMin: -540
   yMax: 540
   xMin: -960
   xMax: 960
-  fileName: sasasascsdasasdsasdsasdsasd
   green_green: -0.04228276
   green_red: 0.7991314
   green_yellow: 0.22844815
