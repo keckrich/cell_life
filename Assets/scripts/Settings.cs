@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Events;
+using MyNamespace;
 // using UnityEngine.JSONSerializeModule;
 
 [CreateAssetMenu(menuName = "My Assets/Setttings")]
@@ -24,6 +26,8 @@ public class Settings : ScriptableObject
     public float xMin = -960.0f;
     [HideInInspector]
     public float xMax = 960.0f;
+
+    public CountEvent OnCountChanged { get; set; }
 
     #region forces
 
@@ -114,6 +118,7 @@ public class Settings : ScriptableObject
     public void setYellow_count(int yellow_count)
     {
         this.yellow_count = yellow_count;
+        OnCountChanged.Invoke(PColors.Yellow);
     }
     public int getRed_count()
     {
@@ -122,6 +127,7 @@ public class Settings : ScriptableObject
     public void setRed_count(int red_count)
     {
         this.red_count = red_count;
+        OnCountChanged.Invoke(PColors.Red);
     }
     public int getGreen_count()
     {
@@ -130,6 +136,7 @@ public class Settings : ScriptableObject
     public void setGreen_count(int green_count)
     {
         this.green_count = green_count;
+        OnCountChanged.Invoke(PColors.Green);
     }
     public int getBlue_count()
     {
@@ -138,7 +145,14 @@ public class Settings : ScriptableObject
     public void setBlue_count(int blue_count)
     {
         this.blue_count = blue_count;
+        OnCountChanged.Invoke(PColors.Blue);
     }
     #endregion
 
+}
+
+
+public class CountEvent : UnityEvent<PColors>
+{
+    public CountEvent(){}
 }

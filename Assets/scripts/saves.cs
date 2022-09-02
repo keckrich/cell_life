@@ -28,6 +28,7 @@ public class saves : MonoBehaviour
         AddSaveFilesToDropdown();
 
         dropdown.onValueChanged.AddListener(o => this.fileName = dropdown.captionText.text);
+        
     }
 
     // Update is called once per frame
@@ -55,6 +56,9 @@ public class saves : MonoBehaviour
         {
             this.fileName += "_1";
         }
+
+        LoadSaveName();
+        AddSaveFilesToDropdown();
     }
 
     public void SaveSettings()
@@ -67,7 +71,9 @@ public class saves : MonoBehaviour
     {
         try {
             string json = System.IO.File.ReadAllText(Application.dataPath + "/saves/" + name + ".json");
-            JsonUtility.FromJsonOverwrite(json, this);
+            JsonUtility.FromJsonOverwrite(json, settingsValues);
+
+            settingsValues.Reset();
         } catch (System.Exception e) {
             Debug.Log(e);
         }
@@ -75,6 +81,7 @@ public class saves : MonoBehaviour
 
     public void LoadSettings()
     {
+        saveFiles.Clear();
         LoadSettings(this.fileName);
     }
     void LoadSaveName(){
@@ -93,6 +100,7 @@ public class saves : MonoBehaviour
     public void AddSaveFilesToDropdown(){
         // clear the dropdown
         dropdown.ClearOptions();
+        // saveFiles.Clear();
 
         // add all save files to dropdown
         foreach (KeyValuePair<int, string> file in saveFiles)

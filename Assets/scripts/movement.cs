@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using MyNamespace;
 
 public class movement : MonoBehaviour
 {
@@ -116,9 +118,12 @@ public class movement : MonoBehaviour
 
         string[] split = "test".Split('_');
 
-        settingsValues.RegisterResetPosEvent(updateCount);
+        settingsValues.OnCountChanged = new CountEvent();
+
+        settingsValues.RegisterResetPosEvent(ResetPosition);
         settingsValues.RegisterRandomizePosEvent(RandomizeConnections);
-        // settingsValues.RegisterGPUEvent(expDist);
+        
+        settingsValues.OnCountChanged.AddListener(c => updateCount(c));
 
         Random.InitState(seed);
 
@@ -128,7 +133,9 @@ public class movement : MonoBehaviour
         blueArray = Create(settingsValues.blue_count, Color.blue);
 
         particleArray = new Particle[][] { yellowArray, redArray, greenArray, blueArray };
-;
+
+//         settingsValues.yellow_count.
+// ;
 
 
     }
@@ -189,7 +196,56 @@ public class movement : MonoBehaviour
         settingsValues.blue_red = expDist();
         settingsValues.blue_yellow = expDist();
     }
+    void updateCount(PColors color){
+        switch(color){
+            case PColors.Yellow:
+                updateCountHelper(ref yellowArray, settingsValues.yellow_count);
+                break;
+            case PColors.Red:
+                updateCountHelper(ref redArray, settingsValues.red_count);
+                break;
+            case PColors.Green:
+                updateCountHelper(ref greenArray, settingsValues.green_count);
+                break;
+            case PColors.Blue:
+                updateCountHelper(ref blueArray, settingsValues.blue_count);
+                break;
+        }
+        particleArray = new Particle[][] { yellowArray, redArray, greenArray, blueArray };
+    }
+    void updateCountHelper(ref Particle[] pArray, int newSize){
+        int oldSize = pArray.Length;
 
+        // if (oldSize == 1 && pArray[0].objID == 0){
+        //     pArray = new Particle[0];
+        // }
+
+        if (newSize == 0){
+            for (int i = newSize; i < oldSize; i++){
+                Destroy(particleDict[pArray[i].objID]);
+                particleDict.Remove(pArray[i].objID);
+            }
+            pArray = Create(newSize, pArray[0].color);
+        }
+        else if (oldSize > newSize){
+            for (int i = newSize; i < oldSize; i++){
+                Destroy(particleDict[pArray[i].objID]);
+                particleDict.Remove(pArray[i].objID);
+            }
+            System.Array.Resize(ref pArray, newSize);
+        }
+        else if (oldSize < newSize){
+            Particle[] newArray = Create(newSize - oldSize, pArray[0].color);
+            System.Array.Resize(ref pArray, newSize);
+            System.Array.Copy(newArray, 0, pArray, oldSize, newArray.Length);
+
+            if (pArray[0].objID == 0){
+                // remove the first element of pArray
+                pArray = pArray.Skip(1).ToArray();
+            }
+
+        }
+    }
     void RandomizeRanges(){
         settingsValues.green_green_range = Random.Range(0f, 1000f);
         settingsValues.green_red_range = Random.Range(0f, 1000f);
@@ -208,7 +264,7 @@ public class movement : MonoBehaviour
         settingsValues.blue_red_range = Random.Range(0f, 1000f);
         settingsValues.blue_yellow_range = Random.Range(0f, 1000f);
     }
-    void updateCount()
+    void ResetPosition()
     {
         Debug.Log("Resetting count");
 
@@ -517,6 +573,7 @@ public class movement : MonoBehaviour
             ComputeBuffer blueBuffer = new ComputeBuffer(blueArray.Length, particleSize);
 
             int maxBuffer = Mathf.Max(greenArray.Length, redArray.Length, yellowArray.Length, blueArray.Length);
+            maxBuffer = maxBuffer < 8 ? 8 : maxBuffer;
 
             // set buffers
             greenBuffer.SetData(greenArray);

@@ -1486,8 +1486,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 6f974370a1a455d42b127beccf12255e, type: 2}
-        m_TargetAssemblyTypeName: Settings, Assembly-CSharp
+      - m_Target: {fileID: 1251112110}
+        m_TargetAssemblyTypeName: saves, Assembly-CSharp
         m_MethodName: setFileName
         m_Mode: 0
         m_Arguments:
