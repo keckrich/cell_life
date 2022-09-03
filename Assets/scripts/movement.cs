@@ -158,26 +158,6 @@ public class movement : MonoBehaviour
         else count++;
     }
 
-    void resetPos()
-    {
-        // Debug.Log("Resetting position");
-
-        for (int i = 0; i < particleArray.Length; i++)
-        {
-            for (int j = 0; j < particleArray[i].Length; j++)
-            {
-
-                particleArray[i][j].fx = 0;
-                particleArray[i][j].fy = 0;
-                particleArray[i][j].vx = 0;
-                particleArray[i][j].vy = 0;
-                particleArray[i][j].x = Random.Range(settingsValues.xMin, settingsValues.xMax);
-                particleArray[i][j].y = Random.Range(settingsValues.yMin, settingsValues.yMax);
-            }
-        }
-        draw();
-
-    }
     void RandomizeConnections(){
         settingsValues.green_green = expDist();
         settingsValues.green_red = expDist();
@@ -266,7 +246,7 @@ public class movement : MonoBehaviour
     }
     void ResetPosition()
     {
-        Debug.Log("Resetting count");
+        // Debug.Log("Resetting count");
 
         for (int i = 0; i < particleArray.Length; i++)
         {

@@ -40,7 +40,7 @@ MonoBehaviour:
   blue_red: 0
   blue_yellow: 0
   blue_green: 0
-  green_green_range: 538
+  green_green_range: 455
   green_red_range: 182
   green_yellow_range: 215
   green_blue_range: 215

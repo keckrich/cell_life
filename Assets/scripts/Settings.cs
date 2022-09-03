@@ -50,8 +50,6 @@ public class Settings : ScriptableObject
     [Range(-1, 1)] public float blue_yellow = 0f;
     [Range(-1, 1)] public float blue_green = 0f;
 
-    [HideInInspector]
-    public float [][] forces { get; set; }
 
     [Range(0, 1000)] public float green_green_range = 100f;
     [Range(0, 1000)] public float green_red_range = 100f;
@@ -70,6 +68,17 @@ public class Settings : ScriptableObject
     [Range(0, 1000)] public float blue_yellow_range = 100f;
     [Range(0, 1000)] public float blue_green_range = 100f;
 
+    [HideInInspector]
+    public float [][] forces { get; set; }
+    [HideInInspector]
+    // public float [][] ranges { get; set; }
+    // private float [][] ranges = new float[4][] {
+    //     new float[4],
+    //     new float[4],
+    //     new float[4],
+    //     new float[4]
+    // };
+    public float [][] ranges;
 
     #endregion
 
@@ -98,6 +107,18 @@ public class Settings : ScriptableObject
 
     public void Reset()
     {
+        forces = new float[4][]{
+            new float[4]{yellow_yellow, yellow_red, yellow_green, yellow_blue},
+            new float[4]{red_yellow, red_red, red_green, red_blue},
+            new float[4]{green_yellow, green_red, green_green, green_blue},
+            new float[4]{blue_yellow, blue_red, blue_green, blue_blue}
+        };
+        ranges = new float[4][]{
+            new float[4]{yellow_yellow_range, yellow_red_range, yellow_green_range, yellow_blue_range},
+            new float[4]{red_yellow_range, red_red_range, red_green_range, red_blue_range},
+            new float[4]{green_yellow_range, green_red_range, green_green_range, green_blue_range},
+            new float[4]{blue_yellow_range, blue_red_range, blue_green_range, blue_blue_range}
+        };
         resetPosEvent();
     }
     public void Randomize()
@@ -150,6 +171,11 @@ public class Settings : ScriptableObject
     {
         this.blue_count = blue_count;
         OnCountChanged.Invoke(PColors.Blue);
+    }
+
+    public void setRanges(float[][] ranges)
+    {
+        this.ranges = ranges;
     }
 
     public void setColorsForce(PColors color1, PColors color2, float force)
@@ -221,6 +247,81 @@ public class Settings : ScriptableObject
                         break;
                     case PColors.Blue:
                         blue_blue = force;
+                        break;
+                }
+                break;
+        }
+    }
+
+    public void setColorsRange(PColors color1, PColors color2, float range)
+    {
+        switch (color1)
+        {
+            case PColors.Green:
+                switch (color2)
+                {
+                    case PColors.Green:
+                        green_green_range = range;
+                        break;
+                    case PColors.Red:
+                        green_red_range = range;
+                        break;
+                    case PColors.Yellow:
+                        green_yellow_range = range;
+                        break;
+                    case PColors.Blue:
+                        green_blue_range = range;
+                        break;
+                }
+                break;
+            case PColors.Red:
+                switch (color2)
+                {
+                    case PColors.Green:
+                        red_green_range = range;
+                        break;
+                    case PColors.Red:
+                        red_red_range = range;
+                        break;
+                    case PColors.Yellow:
+                        red_yellow_range = range;
+                        break;
+                    case PColors.Blue:
+                        red_blue_range = range;
+                        break;
+                }
+                break;
+            case PColors.Yellow:
+                switch (color2)
+                {
+                    case PColors.Green:
+                        yellow_green_range = range;
+                        break;
+                    case PColors.Red:
+                        yellow_red_range = range;
+                        break;
+                    case PColors.Yellow:
+                        yellow_yellow_range = range;
+                        break;
+                    case PColors.Blue:
+                        yellow_blue_range = range;
+                        break;
+                }
+                break;
+            case PColors.Blue:
+                switch (color2)
+                {
+                    case PColors.Green:
+                        blue_green_range = range;
+                        break;
+                    case PColors.Red:
+                        blue_red_range = range;
+                        break;
+                    case PColors.Yellow:
+                        blue_yellow_range = range;
+                        break;
+                    case PColors.Blue:
+                        blue_blue_range = range;
                         break;
                 }
                 break;

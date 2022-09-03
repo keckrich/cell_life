@@ -39,6 +39,8 @@ public class SliderCode : MonoBehaviour
     void Start()
     {
 
+        settingsValues.RegisterResetPosEvent(loadSaveHandler);
+
         // text.text = "";
         //set text to slider value
         // text.text = slider.value.ToString();
@@ -80,14 +82,51 @@ public class SliderCode : MonoBehaviour
             text.text = settingsValues.forces[(int)color1][(int)color2].ToString();
             slider.value = settingsValues.forces[(int)color1][(int)color2];
         }
-        // else if (isRange)
-        // {
-        //     slider.onValueChanged.AddListener((v) =>
-        //     {
-        //         m_intEvent.Invoke((int)v);
-        //     });
-        // }
+        else if (isRange)
+        {
+            slider.onValueChanged.AddListener((v) =>
+            {
+                text.text = v.ToString();
+                m_flaotEvent.Invoke(color1, color2, v);
+            });
+            text.text = settingsValues.ranges[(int)color1][(int)color2].ToString();
+            slider.value = settingsValues.ranges[(int)color1][(int)color2];
+        }
     }
 
+    public void loadSaveHandler(){
+        if (isCount)
+        {
+            switch (color1)
+            {
+                case PColors.Yellow:
+                    text.text = settingsValues.yellow_count.ToString();
+                    slider.value = settingsValues.yellow_count;
+                    break;
+                case PColors.Red:
+                    text.text = settingsValues.red_count.ToString();
+                    slider.value = settingsValues.red_count;
+                    break;
+                case PColors.Green:
+                    text.text = settingsValues.green_count.ToString();
+                    slider.value = settingsValues.green_count;
+                    break;
+                case PColors.Blue:
+                    text.text = settingsValues.blue_count.ToString();
+                    slider.value = settingsValues.blue_count;
+                    break;
+            }
+        }
+        else if (isForce)
+        {
+            text.text = settingsValues.forces[(int)color1][(int)color2].ToString();
+            slider.value = settingsValues.forces[(int)color1][(int)color2];
+        }
+        else if (isRange)
+        {
+            text.text = settingsValues.ranges[(int)color1][(int)color2].ToString();
+            slider.value = settingsValues.ranges[(int)color1][(int)color2];
+        }
+    }
 
 }
