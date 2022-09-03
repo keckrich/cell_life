@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   darkTheme: 1
-  yellow_count: 702
-  red_count: 503
-  green_count: 413
-  blue_count: 340
+  yellow_count: 545
+  red_count: 572
+  green_count: 482
+  blue_count: 233
   gravity: 0.009
   damping: 0.813
-  speed: 0.088
+  speed: 0
   yMin: -540
   yMax: 540
   xMin: -960

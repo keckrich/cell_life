@@ -298,11 +298,13 @@ public class movement : MonoBehaviour
 
         for (int i = 0; i < number; i++)
         {
-            GameObject go = Instantiate(particleObj, new Vector3(Random.Range(settingsValues.xMin, settingsValues.xMax), Random.Range(settingsValues.yMin, settingsValues.yMax), 0f), Quaternion.identity);
+            GameObject go = Instantiate(particleObj, new Vector3(Random.Range(settingsValues.xMin, settingsValues.xMax), Random.Range(settingsValues.yMin, settingsValues.yMax), 0f), Quaternion.identity, particleObj.transform.parent);
             spriteRenderer = go.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
             result[i] = new Particle(0f,0f, go.transform.position.x, go.transform.position.y, 0f, 0f, color, go.GetInstanceID());
             particleDict.Add(go.GetInstanceID(), go);
+
+            // go.transform.parent = transform;
         }
 
         if (number == 0){
