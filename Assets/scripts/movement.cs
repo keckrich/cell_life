@@ -555,7 +555,7 @@ public class movement : MonoBehaviour
             ComputeBuffer blueBuffer = new ComputeBuffer(blueArray.Length, particleSize);
 
             int maxBuffer = Mathf.Max(greenArray.Length, redArray.Length, yellowArray.Length, blueArray.Length);
-            maxBuffer = maxBuffer < 8 ? 8 : maxBuffer;
+            // maxBuffer = maxBuffer < 8 ? 8 : maxBuffer;
 
             // set buffers
             greenBuffer.SetData(greenArray);
@@ -572,7 +572,7 @@ public class movement : MonoBehaviour
             computeShader.SetFloats("dimensions", new float[] {WIDTH, HEIGHT});
             computeShader.SetFloat("radius", radius);
 
-            computeShader.Dispatch(0, maxBuffer / 8, maxBuffer / 8, 1);
+            computeShader.Dispatch(0, (maxBuffer / 8)+1, (maxBuffer / 8)+1, 1);
 
             // get data back
             greenBuffer.GetData(greenArray);
