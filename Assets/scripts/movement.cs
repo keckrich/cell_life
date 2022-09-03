@@ -121,7 +121,7 @@ public class movement : MonoBehaviour
         settingsValues.OnCountChanged = new CountEvent();
 
         settingsValues.RegisterResetPosEvent(ResetPosition);
-        settingsValues.RegisterRandomizePosEvent(RandomizeConnections);
+        settingsValues.RegisterRandomizePosEvent(RandomizeForces);
         
         settingsValues.OnCountChanged.AddListener(c => updateCount(c));
 
@@ -158,24 +158,6 @@ public class movement : MonoBehaviour
         else count++;
     }
 
-    void RandomizeConnections(){
-        settingsValues.green_green = expDist();
-        settingsValues.green_red = expDist();
-        settingsValues.green_yellow = expDist();
-        settingsValues.green_blue = expDist();
-        settingsValues.red_red = expDist();
-        settingsValues.red_green = expDist();
-        settingsValues.red_yellow = expDist();
-        settingsValues.red_blue = expDist();
-        settingsValues.yellow_yellow = expDist();
-        settingsValues.yellow_green = expDist();
-        settingsValues.yellow_red = expDist();
-        settingsValues.yellow_blue = expDist();
-        settingsValues.blue_blue = expDist();
-        settingsValues.blue_green = expDist();
-        settingsValues.blue_red = expDist();
-        settingsValues.blue_yellow = expDist();
-    }
     void updateCount(PColors color){
         switch(color){
             case PColors.Yellow:
@@ -226,6 +208,30 @@ public class movement : MonoBehaviour
 
         }
     }
+    
+    public void RandomizeForceAndRange(){
+        RandomizeForces();
+        RandomizeRanges();
+        settingsValues.RandomizeRangeEvent();
+    }
+    void RandomizeForces(){
+        settingsValues.green_green = expDist();
+        settingsValues.green_red = expDist();
+        settingsValues.green_yellow = expDist();
+        settingsValues.green_blue = expDist();
+        settingsValues.red_red = expDist();
+        settingsValues.red_green = expDist();
+        settingsValues.red_yellow = expDist();
+        settingsValues.red_blue = expDist();
+        settingsValues.yellow_yellow = expDist();
+        settingsValues.yellow_green = expDist();
+        settingsValues.yellow_red = expDist();
+        settingsValues.yellow_blue = expDist();
+        settingsValues.blue_blue = expDist();
+        settingsValues.blue_green = expDist();
+        settingsValues.blue_red = expDist();
+        settingsValues.blue_yellow = expDist();
+    }
     void RandomizeRanges(){
         settingsValues.green_green_range = Random.Range(0f, 1000f);
         settingsValues.green_red_range = Random.Range(0f, 1000f);
@@ -244,6 +250,7 @@ public class movement : MonoBehaviour
         settingsValues.blue_red_range = Random.Range(0f, 1000f);
         settingsValues.blue_yellow_range = Random.Range(0f, 1000f);
     }
+
     void ResetPosition()
     {
         // Debug.Log("Resetting count");

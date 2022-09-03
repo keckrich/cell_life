@@ -30,6 +30,7 @@ public class Settings : ScriptableObject
     public CountEvent OnCountChanged { get; set; }
 
 
+
     #region forces
 
     [Header("Forces")]
@@ -88,6 +89,7 @@ public class Settings : ScriptableObject
     private resetPos randomizePosEvent;
     private resetPos validateEvent;
     private resetPos GPUEvent;
+    private resetPos randomizeRangeEvent;
     public void RegisterResetPosEvent(resetPos resetPosEvent)
     {
         this.resetPosEvent += resetPosEvent;
@@ -103,6 +105,10 @@ public class Settings : ScriptableObject
     public void RegisterGPUEvent(resetPos GPUEvent)
     {
         this.GPUEvent += GPUEvent;
+    }
+    public void RegisterRandomizeRangeEvent(resetPos randomizeRangeEvent)
+    {
+        this.randomizeRangeEvent += randomizeRangeEvent;
     }
 
     public void Reset()
@@ -121,9 +127,25 @@ public class Settings : ScriptableObject
         };
         resetPosEvent();
     }
-    public void Randomize()
+    public void RandomizePos()
     {
         randomizePosEvent();
+    }
+    public void RandomizeRangeEvent()
+    {
+        forces = new float[4][]{
+            new float[4]{yellow_yellow, yellow_red, yellow_green, yellow_blue},
+            new float[4]{red_yellow, red_red, red_green, red_blue},
+            new float[4]{green_yellow, green_red, green_green, green_blue},
+            new float[4]{blue_yellow, blue_red, blue_green, blue_blue}
+        };
+        ranges = new float[4][]{
+            new float[4]{yellow_yellow_range, yellow_red_range, yellow_green_range, yellow_blue_range},
+            new float[4]{red_yellow_range, red_red_range, red_green_range, red_blue_range},
+            new float[4]{green_yellow_range, green_red_range, green_green_range, green_blue_range},
+            new float[4]{blue_yellow_range, blue_red_range, blue_green_range, blue_blue_range}
+        };
+        randomizeRangeEvent();
     }
     public void GPUClick()
     {

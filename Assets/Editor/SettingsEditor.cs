@@ -24,7 +24,7 @@ public class SettingsEditor : Editor
 
         if (GUILayout.Button("Randomize"))
         {
-            settings.Randomize();
+            settings.RandomizePos();
         }
     }
 

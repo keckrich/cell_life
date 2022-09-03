@@ -40,6 +40,7 @@ public class SliderCode : MonoBehaviour
     {
 
         settingsValues.RegisterResetPosEvent(loadSaveHandler);
+        settingsValues.RegisterRandomizeRangeEvent(loadSaveHandler);
 
         // text.text = "";
         //set text to slider value
