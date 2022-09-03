@@ -40,7 +40,7 @@ public class saves : MonoBehaviour
     // save settings as json to file
     public void SaveSettings(string name)
     {
-        string json = JsonUtility.ToJson(this);
+        string json = JsonUtility.ToJson(settingsValues);
         System.IO.File.WriteAllText(Application.dataPath + "/saves/" + name + ".json", json);
 
         // update the count of filename

@@ -29,6 +29,7 @@ public class Settings : ScriptableObject
 
     public CountEvent OnCountChanged { get; set; }
 
+
     #region forces
 
     [Header("Forces")]
@@ -48,6 +49,9 @@ public class Settings : ScriptableObject
     [Range(-1, 1)] public float blue_red = 0f;
     [Range(-1, 1)] public float blue_yellow = 0f;
     [Range(-1, 1)] public float blue_green = 0f;
+
+    [HideInInspector]
+    public float [][] forces { get; set; }
 
     [Range(0, 1000)] public float green_green_range = 100f;
     [Range(0, 1000)] public float green_red_range = 100f;
@@ -147,6 +151,82 @@ public class Settings : ScriptableObject
         this.blue_count = blue_count;
         OnCountChanged.Invoke(PColors.Blue);
     }
+
+    public void setColorsForce(PColors color1, PColors color2, float force)
+    {
+        switch (color1)
+        {
+            case PColors.Green:
+                switch (color2)
+                {
+                    case PColors.Green:
+                        green_green = force;
+                        break;
+                    case PColors.Red:
+                        green_red = force;
+                        break;
+                    case PColors.Yellow:
+                        green_yellow = force;
+                        break;
+                    case PColors.Blue:
+                        green_blue = force;
+                        break;
+                }
+                break;
+            case PColors.Red:
+                switch (color2)
+                {
+                    case PColors.Green:
+                        red_green = force;
+                        break;
+                    case PColors.Red:
+                        red_red = force;
+                        break;
+                    case PColors.Yellow:
+                        red_yellow = force;
+                        break;
+                    case PColors.Blue:
+                        red_blue = force;
+                        break;
+                }
+                break;
+            case PColors.Yellow:
+                switch (color2)
+                {
+                    case PColors.Green:
+                        yellow_green = force;
+                        break;
+                    case PColors.Red:
+                        yellow_red = force;
+                        break;
+                    case PColors.Yellow:
+                        yellow_yellow = force;
+                        break;
+                    case PColors.Blue:
+                        yellow_blue = force;
+                        break;
+                }
+                break;
+            case PColors.Blue:
+                switch (color2)
+                {
+                    case PColors.Green:
+                        blue_green = force;
+                        break;
+                    case PColors.Red:
+                        blue_red = force;
+                        break;
+                    case PColors.Yellow:
+                        blue_yellow = force;
+                        break;
+                    case PColors.Blue:
+                        blue_blue = force;
+                        break;
+                }
+                break;
+        }
+    }
+
     #endregion
 
 }
