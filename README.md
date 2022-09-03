@@ -5,7 +5,7 @@ TODO
 [x] update sliders after loading
 [x] add 16 more sliders
 [x] move particles when not factor of 8
-[] add randomize buttons
+[x] add randomize buttons
 [] fix drop down pre-loading ish the first save
 
 [] allow chging of color

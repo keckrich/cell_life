@@ -85,6 +85,8 @@ public class saves : MonoBehaviour
         LoadSettings(this.fileName);
     }
     void LoadSaveName(){
+        saveFiles.Clear();
+
         // load all save files
         // string[] files = System.IO.Directory.GetFiles(Application.dataPath + "/saves/");
         string[] files = Directory.GetFiles(Application.dataPath + "/saves/", "*.json");
@@ -107,6 +109,9 @@ public class saves : MonoBehaviour
         {
             dropdown.options.Add(new TMP_Dropdown.OptionData(file.Value.Split('/')[file.Value.Split('/').Length - 1].Split('.')[0]));
         }
+        
+        dropdown.RefreshShownValue();
+
     }
 
     #region Getters and Setters
