@@ -13,6 +13,7 @@ public class saves : MonoBehaviour
     Dictionary<int, string> saveFiles = new Dictionary<int, string>();
 
     public TMP_Dropdown dropdown;
+    public TMP_InputField inputField;
   
 
    
@@ -43,19 +44,19 @@ public class saves : MonoBehaviour
         string json = JsonUtility.ToJson(settingsValues);
         System.IO.File.WriteAllText(Application.dataPath + "/saves/" + name + ".json", json);
 
-        // update the count of filename
-        string[] split = this.fileName.Split('_');
-        int count = 0;
+        // // update the count of filename
+        // string[] split = this.fileName.Split('_');
+        // int count = 0;
 
-        if (int.TryParse(split[split.Length - 1], out count))
-        {
-            split[split.Length - 1] = (count + 1).ToString();
-            this.fileName = string.Join("_", split);
-        }
-        else
-        {
-            this.fileName += "_1";
-        }
+        // if (int.TryParse(split[split.Length - 1], out count))
+        // {
+        //     split[split.Length - 1] = (count + 1).ToString();
+        //     this.fileName = string.Join("_", split);
+        // }
+        // else
+        // {
+        //     this.fileName += "_1";
+        // }
 
         LoadSaveName();
         AddSaveFilesToDropdown();
@@ -74,6 +75,12 @@ public class saves : MonoBehaviour
             JsonUtility.FromJsonOverwrite(json, settingsValues);
 
             settingsValues.Reset();
+
+            //TODO: change the name field to the name of the file
+            // update the file name and imput field to the new file name
+             this.fileName = name;
+             this.inputField.text = name;
+
         } catch (System.Exception e) {
             Debug.Log(e);
         }
@@ -84,12 +91,14 @@ public class saves : MonoBehaviour
         saveFiles.Clear();
         LoadSettings(this.fileName);
     }
+    // load all the save files
     void LoadSaveName(){
         saveFiles.Clear();
 
         // load all save files
         // string[] files = System.IO.Directory.GetFiles(Application.dataPath + "/saves/");
         string[] files = Directory.GetFiles(Application.dataPath + "/saves/", "*.json");
+        saveFiles.Add(0, "");
 
         // add all save files to dictionary
         foreach (string file in files)

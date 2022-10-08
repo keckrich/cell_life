@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class StartUp : MonoBehaviour
 {
 
     public Settings settingsValues;
+    public TMP_Dropdown dropdown;
     
     void Awake()
     {
@@ -22,6 +24,15 @@ public class StartUp : MonoBehaviour
             new float[4]{settingsValues.green_yellow_range, settingsValues.green_red_range, settingsValues.green_green_range, settingsValues.green_blue_range},
             new float[4]{settingsValues.blue_yellow_range, settingsValues.blue_red_range, settingsValues.blue_green_range, settingsValues.blue_blue_range}
         };
+    }
+
+    public void SetDropdown(){
+        int index = settingsValues.temp;
+        
+        dropdown.value = index;
+
+        Debug.Log("Dropdown value set from " + settingsValues.temp + " to " + dropdown.value);
+
     }
 
 

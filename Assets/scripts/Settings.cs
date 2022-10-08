@@ -9,10 +9,16 @@ public class Settings : ScriptableObject
 {
     [Header("Simulation Settings")]
     public bool darkTheme = true;
+    public bool isPaused = false;
     public int yellow_count = 200;
     public int red_count = 1;
     public int green_count = 1;
     public int blue_count = 1;
+
+
+
+    public int temp = 0;
+    private void DoSth() => Debug.Log("Button Clicked!");
 
     [Range(0, 1)] public float gravity = 1f;
     [Range(0, 1)] public float damping = 1f;

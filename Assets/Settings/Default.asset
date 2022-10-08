@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   darkTheme: 1
-  yellow_count: 256
-  red_count: 256
-  green_count: 256
-  blue_count: 256
+  isPaused: 0
+  yellow_count: 361
+  red_count: 351
+  green_count: 976
+  blue_count: 337
+  temp: 50
   gravity: 0.01
   damping: 0.9
   speed: 0
@@ -24,35 +26,35 @@ MonoBehaviour:
   yMax: 540
   xMin: -960
   xMax: 960
-  green_green: 0
-  green_red: 0
-  green_yellow: 0
-  green_blue: 0
-  red_red: 0
-  red_green: 0
-  red_yellow: 0
-  red_blue: 0
-  yellow_yellow: 0
-  yellow_red: 0
-  yellow_green: 0
-  yellow_blue: 0
-  blue_blue: 0
-  blue_red: 0
-  blue_yellow: 0
-  blue_green: 0
-  green_green_range: 218.1363
-  green_red_range: 402.49533
-  green_yellow_range: 338
-  green_blue_range: 350
-  red_red_range: 307.98358
-  red_green_range: 282
-  red_yellow_range: 293
-  red_blue_range: 45
-  yellow_yellow_range: 242
-  yellow_red_range: 350
-  yellow_green_range: 242
-  yellow_blue_range: 280
-  blue_blue_range: 280
-  blue_red_range: 403
-  blue_yellow_range: 191.37025
-  blue_green_range: 75.34135
+  green_green: -0.829651
+  green_red: -0.7219423
+  green_yellow: 0.061391592
+  green_blue: -0.7709011
+  red_red: -0.08548379
+  red_green: -0.69256735
+  red_yellow: -0.761106
+  red_blue: 0.20826769
+  yellow_yellow: -0.81006145
+  yellow_red: -0.7611027
+  yellow_green: -0.8100647
+  yellow_blue: -0.8688146
+  blue_blue: -0.6729875
+  blue_red: -0.22256929
+  blue_yellow: -0.6631956
+  blue_green: -0.44777834
+  green_green_range: 455
+  green_red_range: 182
+  green_yellow_range: 215
+  green_blue_range: 215
+  red_red_range: 321
+  red_green_range: 327
+  red_yellow_range: 192
+  red_blue_range: 227
+  yellow_yellow_range: 347
+  yellow_red_range: 133
+  yellow_green_range: 145
+  yellow_blue_range: 234
+  blue_blue_range: 209
+  blue_red_range: 262
+  blue_yellow_range: 110
+  blue_green_range: 163

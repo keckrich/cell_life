@@ -148,7 +148,9 @@ public class movement : MonoBehaviour
 
 
             // CPURender(); 
+            if (!settingsValues.isPaused){
             GPURender();
+            }
             // HybridRender();
             draw();
 
@@ -685,5 +687,9 @@ public class movement : MonoBehaviour
         r = r*s;
         // Debug.Log(r);
         return r;
+    }
+
+    public void TogglePause(){
+        settingsValues.isPaused = !settingsValues.isPaused;
     }
 }

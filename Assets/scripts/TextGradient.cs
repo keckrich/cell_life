@@ -18,7 +18,17 @@ public class TextGradient : MonoBehaviour {
     /// Do gradient text
     /// </summary>
     private void Start () {
+        ApplyOutline ();
         ApplyGradient ();
+    }
+
+    void ApplyOutline()
+    {
+        TMP_Text text = GetComponent<TMP_Text>();
+        // TextMeshPro textmeshPro = GetComponent<TextMeshPro>();
+        text.outlineWidth = 0.2f;
+        text.outlineColor = new Color32(64, 68, 67, 255);
+        // text.outlineColor = new Color32(107, 111, 111, 255);
     }
 
     /// <summary>
