@@ -13,48 +13,48 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   darkTheme: 1
-  isPaused: 0
-  yellow_count: 361
-  red_count: 351
-  green_count: 976
-  blue_count: 337
+  isPaused: 1
+  yellow_count: 512
+  red_count: 512
+  green_count: 512
+  blue_count: 199
   temp: 50
-  gravity: 0.01
-  damping: 0.9
-  speed: 0
+  gravity: 0.010753373
+  damping: 0.97
+  speed: 0.103
   yMin: -540
   yMax: 540
   xMin: -960
   xMax: 960
-  green_green: -0.829651
-  green_red: -0.7219423
-  green_yellow: 0.061391592
-  green_blue: -0.7709011
-  red_red: -0.08548379
-  red_green: -0.69256735
-  red_yellow: -0.761106
-  red_blue: 0.20826769
-  yellow_yellow: -0.81006145
-  yellow_red: -0.7611027
-  yellow_green: -0.8100647
-  yellow_blue: -0.8688146
-  blue_blue: -0.6729875
-  blue_red: -0.22256929
-  blue_yellow: -0.6631956
-  blue_green: -0.44777834
+  green_green: -0.04228276
+  green_red: 0.7991314
+  green_yellow: 0.22844815
+  green_blue: 0.422926
+  red_red: -0.07160896
+  red_green: -0.20750678
+  red_yellow: 0.113244355
+  red_blue: -0.2488836
+  yellow_yellow: 0.14104289
+  yellow_red: -0.14918166
+  yellow_green: 0.9867148
+  yellow_blue: -0.43358707
+  blue_blue: 0.1986785
+  blue_red: 0.2030648
+  blue_yellow: 0.13075346
+  blue_green: -0.6623541
   green_green_range: 455
-  green_red_range: 182
+  green_red_range: 122
   green_yellow_range: 215
   green_blue_range: 215
   red_red_range: 321
   red_green_range: 327
   red_yellow_range: 192
   red_blue_range: 227
-  yellow_yellow_range: 347
+  yellow_yellow_range: 367
   yellow_red_range: 133
   yellow_green_range: 145
   yellow_blue_range: 234
   blue_blue_range: 209
   blue_red_range: 262
-  blue_yellow_range: 110
+  blue_yellow_range: 0
   blue_green_range: 163

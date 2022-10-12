@@ -129,10 +129,11 @@ public class SliderCode : MonoBehaviour
             case SliderType.Speed:              
                 slider.onValueChanged.AddListener((v) =>
                 {
-                    text.text = v.ToString();
+                    // show speed as a percentage with two decimal places
+                    text.text = $"{v * 1000:F2}%";
                     m_flaotEvent.Invoke(v);
                 });
-                text.text = (settingsValues.speed * 1000).ToString() + "%";
+                text.text = $"{settingsValues.speed * 1000:F2}%";
                 slider.value = settingsValues.speed;
                 break;
         }
@@ -179,7 +180,7 @@ public class SliderCode : MonoBehaviour
                 slider.value = settingsValues.damping;
                 break;
             case SliderType.Speed:
-                text.text = (settingsValues.speed * 1000).ToString() + "%";
+                text.text = $"{settingsValues.speed * 1000:F2}%";
                 slider.value = settingsValues.speed;
                 break;
         }
