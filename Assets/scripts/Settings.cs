@@ -206,6 +206,21 @@ public class Settings : ScriptableObject
         this.ranges = ranges;
     }
 
+    public void setGravity(float gravity)
+    {
+        this.gravity = gravity;
+    }
+
+    public void setDamping(float damping)
+    {
+        this.damping = damping;
+    }
+
+    public void setSpeed(float speed)
+    {
+        this.speed = 0.1f - speed;
+    }
+
     public void setColorsForce(PColors color1, PColors color2, float force)
     {
         switch (color1)

@@ -106,7 +106,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     dx = dx * getDirection(a.position.x, b.position.x, dimensions.x);
     dy = dy * getDirection(a.position.y, b.position.y, dimensions.y);
 
-    if (distance > 0 && distance < currentRule.range && !(a.position.x == 0 && a.position.y == 0)) {
+    if ((distance > 0 || currentRule.force < 0) && distance < currentRule.range && !(a.position.x == 0 && a.position.y == 0)) {
         a.force.x += dx / distance;
         a.force.y += dy / distance;
         // float force =  currentRule.force * (1 / distance);
