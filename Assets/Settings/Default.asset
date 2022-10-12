@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   darkTheme: 1
-  isPaused: 1
+  isPaused: 0
   yellow_count: 512
   red_count: 512
   green_count: 512
   blue_count: 199
   temp: 50
-  gravity: 0.010753373
-  damping: 0.97
-  speed: 0.103
+  gravity: 0.009
+  damping: 0.813
+  speed: 0
   yMin: -540
   yMax: 540
   xMin: -960

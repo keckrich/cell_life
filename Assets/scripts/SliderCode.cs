@@ -180,8 +180,8 @@ public class SliderCode : MonoBehaviour
                 slider.value = settingsValues.damping;
                 break;
             case SliderType.Speed:
-                text.text = $"{settingsValues.speed * 1000:F2}%";
-                slider.value = settingsValues.speed;
+                text.text = $"{(0.1-settingsValues.speed) * 1000:F2}%";
+                slider.value = 0.1f-settingsValues.speed;
                 break;
         }
     }
