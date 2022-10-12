@@ -108,6 +108,33 @@ public class SliderCode : MonoBehaviour
                 text.text = settingsValues.ranges[(int)color1][(int)color2].ToString();
                 slider.value = settingsValues.ranges[(int)color1][(int)color2];
                 break;
+            case SliderType.Gavity:
+                slider.onValueChanged.AddListener((v) =>
+                {
+                    text.text = v.ToString();
+                    m_flaotEvent.Invoke(v);
+                });
+                text.text = settingsValues.gravity.ToString();
+                slider.value = settingsValues.gravity;
+                break;
+            case SliderType.Damping:
+                slider.onValueChanged.AddListener((v) =>
+                {
+                    text.text = v.ToString();
+                    m_flaotEvent.Invoke(v);
+                });
+                text.text = settingsValues.damping.ToString();
+                slider.value = settingsValues.damping;
+                break;
+            case SliderType.Speed:              
+                slider.onValueChanged.AddListener((v) =>
+                {
+                    text.text = v.ToString();
+                    m_flaotEvent.Invoke(v);
+                });
+                text.text = (settingsValues.speed * 1000).ToString() + "%";
+                slider.value = settingsValues.speed;
+                break;
         }
     }
 
